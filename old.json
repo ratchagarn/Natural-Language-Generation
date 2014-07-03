@@ -1,0 +1,24 @@
+{
+	"jitta": {
+		"Jitta Line": "32.62% Above Jitta Line",
+		"Price": 92.93
+	},
+	"quantitative": {
+		"Jitta Score": 6.80,
+		"Loss Chance": 35.4,
+		"Growth Opportunity": 90,
+		"Recent Business Performance": 35,
+		"Financial Strength": 100,
+		"Return to Share Holder": 68,
+		"Competitive Advantage": 98
+	},
+	"qualitative": {
+		"Revenue and Earning": "Consistently High Growth",
+		"Operating Margin": null,
+		"Debt Level": "Low Long Term Debt",
+		"Return on Equity": "Consistently High",
+		"Dividend Payout": null,
+		"Share Repurchase": null,
+		"CapEx": "Very Low"
+	}
+}

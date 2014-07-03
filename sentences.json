@@ -1,0 +1,74 @@
+{
+	"quantitative": {
+		"-5": [
+			"-5 {name} has highly dropped from {oldData} to {newData}",
+			"-5 {name} has highly dropped to {newData}",
+			"-5 {name} has highly dropped for {difference}"
+		],
+		"-4": [
+			"-4 {name} has highly dropped from {oldData} to {newData}",
+			"-4 {name} has highly dropped to {newData}",
+			"-4 {name} has highly dropped for {difference}"
+		],
+		"-3": [
+			"-3 {name} has highly dropped from {oldData} to {newData}",
+			"-3 {name} has highly dropped to {newData}",
+			"-3 {name} has highly dropped for {difference}"
+		],
+		"-2": [
+			"-2 {name} has highly dropped from {oldData} to {newData}",
+			"-2 {name} has highly dropped to {newData}",
+			"-2 {name} has highly dropped for {difference}"
+		],
+		"-1": [
+			"-1 {name} has slightly dropped from {oldData} to {newData}",
+			"-1 {name} has slightly dropped to {newData}",
+			"-1 {name} has slightly dropped for {difference}"
+		],
+		"0": [
+			"{name} is ok"
+		],
+		"1": [
+			"1 {name} has slightly raised from {oldData} to {newData}",
+			"1 {name} has slightly raised to {newData}",
+			"1 {name} has slightly raised for {difference}"
+		],
+		"2": [
+			"2 {name} has greatly raised from {oldData} to {newData}",
+			"2 {name} has greatly raised to {newData}",
+			"2 {name} has greatly raised for {difference}"
+		],
+		"3": [
+			"3 {name} has greatly raised from {oldData} to {newData}",
+			"3 {name} has greatly raised to {newData}",
+			"3 {name} has greatly raised for {difference}"
+		],
+		"4": [
+			"4 {name} has greatly raised from {oldData} to {newData}",
+			"4 {name} has greatly raised to {newData}",
+			"4 {name} has greatly raised for {difference}"
+		],
+		"5": [
+			"5 {name} has greatly raised from {oldData} to {newData}",
+			"5 {name} has greatly raised to {newData}",
+			"5 {name} has greatly raised for {difference}"
+		]
+	},
+	"qualitative": {
+		"+2": [
+			"2 {name} is {newData}"
+		],
+		"+1": [
+			"1 {name} is {newData}"
+		],
+		"0": [
+			"0 {name} is still {newData}"
+		],
+		"-1": [
+			"-1 {name} is {newData}"
+		],
+		"-2": [
+			"-2 {name} is {newData}"
+		]
+	}
+}

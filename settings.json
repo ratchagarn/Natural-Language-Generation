@@ -1,0 +1,82 @@
+{
+	"jitta": {
+		"Jitta Line": {
+			"priority": 2,
+			"sensitiveness": 0.8
+		},
+		"Price": {
+			"priority": 4,
+			"sensitiveness": 0.8
+		}
+	},
+	"quantitative": {
+		"Jitta Score": {
+			"max": 10,
+			"min": 0,
+			"priority": 1
+		},
+		"Loss Chance": {
+			"max": 100,
+			"min": 0,
+			"sensitiveness": 0.8,
+			"priority": 3
+		},
+		"Jitta Score": {
+			"max": 100,
+			"min": 0,
+			"sensitiveness": 0.8,
+			"priority": 1
+		},
+		"Price": {
+			"max": 100,
+			"min": 0,
+			"sensitiveness": 0.8,
+			"priority": 3
+		},
+		"Loss Chance": {
+			"max": 100,
+			"min": 0,
+			"sensitiveness": 0.8,
+			"priority": 4
+		},
+		"Growth Opportunity": {
+			"max": 100,
+			"min": 0,
+			"sensitiveness": 0.8,
+			"priority": 5
+		},
+		"Recent Business Performance": {
+			"max": 100,
+			"min": 0,
+			"sensitiveness": 0.8,
+			"priority": 9
+		},
+		"Financial Strength": {
+			"max": 100,
+			"min": 0,
+			"sensitiveness": 0.8,
+			"priority": 8
+		},
+		"Return to Share Holder": {
+			"max": 100,
+			"min": 0,
+			"sensitiveness": 0.8,
+			"priority": 7
+		},
+		"Competitive Advantage": {
+			"max": 100,
+			"min": 0,
+			"sensitiveness": 0.8,
+			"priority": 6
+		}
+	},
+	"qualitative": {
+		"Revenue and Earning": 1,
+		"Operating Margin": 2,
+		"Debt Level": 3,
+		"Return on Equity": 4,
+		"Dividend Payout": 5,
+		"Share Repurchase": 1,
+		"CapEx": 1
+	}
+}
