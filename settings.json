@@ -1,82 +1,95 @@
 {
 	"jitta": {
-		"Jitta Line": {
-			"priority": 2,
-			"sensitiveness": 0.8
-		},
 		"Price": {
 			"priority": 4,
+			"always_show": true,
 			"sensitiveness": 0.8
 		}
 	},
 	"quantitative": {
-		"Jitta Score": {
+		"Jitta Line": {
+			"priority": 2,
+			"always_show": true,
+			"sensitiveness": 0.8
+		},
+		"Jitta Score": { 
 			"max": 10,
 			"min": 0,
+			"sensitiveness": 0.8,
+			"always_show": false,
 			"priority": 1
 		},
 		"Loss Chance": {
 			"max": 100,
 			"min": 0,
 			"sensitiveness": 0.8,
-			"priority": 3
-		},
-		"Jitta Score": {
-			"max": 100,
-			"min": 0,
-			"sensitiveness": 0.8,
-			"priority": 1
-		},
-		"Price": {
-			"max": 100,
-			"min": 0,
-			"sensitiveness": 0.8,
-			"priority": 3
-		},
-		"Loss Chance": {
-			"max": 100,
-			"min": 0,
-			"sensitiveness": 0.8,
+			"always_show": false,
 			"priority": 4
 		},
 		"Growth Opportunity": {
 			"max": 100,
 			"min": 0,
 			"sensitiveness": 0.8,
+			"always_show": false,
 			"priority": 5
 		},
 		"Recent Business Performance": {
 			"max": 100,
 			"min": 0,
 			"sensitiveness": 0.8,
+			"always_show": false,
 			"priority": 9
 		},
 		"Financial Strength": {
 			"max": 100,
 			"min": 0,
 			"sensitiveness": 0.8,
+			"always_show": false,
 			"priority": 8
 		},
 		"Return to Share Holder": {
 			"max": 100,
 			"min": 0,
 			"sensitiveness": 0.8,
+			"always_show": false,
 			"priority": 7
 		},
 		"Competitive Advantage": {
 			"max": 100,
 			"min": 0,
 			"sensitiveness": 0.8,
+			"always_show": false,
 			"priority": 6
 		}
 	},
 	"qualitative": {
-		"Revenue and Earning": 1,
-		"Operating Margin": 2,
-		"Debt Level": 3,
-		"Return on Equity": 4,
-		"Dividend Payout": 5,
-		"Share Repurchase": 1,
-		"CapEx": 1
+		"Revenue and Earning": {
+			"always_show": false,
+			"priority": 6
+		},
+		"Operating Margin": {
+			"always_show": false,
+			"priority": 7
+		},
+		"Debt Level": {
+			"always_show": false,
+			"priority": 5
+		},
+		"Return on Equity": {
+			"always_show": false,
+			"priority": 4
+		},
+		"Dividend Payout": {
+			"always_show": false,
+			"priority": 3
+		},
+		"Share Repurchase": {
+			"always_show": false,
+			"priority": 2
+		},
+		"CapEx": {
+			"always_show": false,
+			"priority": 1
+		}
 	}
 }

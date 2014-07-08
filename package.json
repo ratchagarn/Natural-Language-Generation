@@ -1,5 +1,5 @@
 {
-  "name": "Natural Language Generation",
+  "name": "Natural_Language_Generation",
   "version": "0.0.0",
   "description": "",
   "main": "app.js",
@@ -9,6 +9,7 @@
   "author": "",
   "license": "BSD-2-Clause",
   "dependencies": {
-    "underscore": "~1.6.0"
+    "underscore": "~1.6.0",
+    "coffee-script": "~1.7.1"
   }
 }
