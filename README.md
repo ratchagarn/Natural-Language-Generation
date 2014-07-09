@@ -1,3 +1,3 @@
 Natural-Language-Generation
 ===========================
-Run 'node app'
+Run 'coffee JittaData.coffee'

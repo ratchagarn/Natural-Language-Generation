@@ -1,9 +1,9 @@
 {
 	"jitta": {
 		"Price": {
-			"priority": 4,
+			"priority": 1,
 			"always_show": true,
-			"sensitiveness": 0.8
+			"sensitiveness": 0.5
 		}
 	},
 	"quantitative": {
