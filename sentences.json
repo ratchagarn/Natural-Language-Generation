@@ -1,207 +1,207 @@
 {
 	"quantitative": {
 		"-5": [
-			"The {name} has extremely dropped from {oldData} to {newData}.",
-			"The {name} has extremely dropped to {newData}.",
-			"The {name} has extremely dropped for {difference}."
+			"{name} has extremely dropped from {oldData} to {newData}.",
+			"{name} has extremely dropped to {newData}.",
+			"{name} has extremely dropped for {difference}."
 		],
 		"-4": [
-			"The {name} has greatly dropped from {oldData} to {newData}.",
-			"The {name} has greatly dropped to {newData}.",
-			"The {name} has greatly dropped for {difference}."
+			"{name} has greatly dropped from {oldData} to {newData}.",
+			"{name} has greatly dropped to {newData}.",
+			"{name} has greatly dropped for {difference}."
 		],
 		"-3": [
-			"The {name} is down from from {oldData} to {newData}."
+			"{name} is down from from {oldData} to {newData}."
 		],
 		"-2": [
-			"The {name} has dropped from {oldData} to {newData}.",
-			"The {name} has dropped to {newData}.",
-			"The {name} has dropped for {difference}."
+			"{name} has dropped from {oldData} to {newData}.",
+			"{name} has dropped to {newData}.",
+			"{name} has dropped for {difference}."
 		],
 		"-1": [
-			"The {name} has slightly dropped from {oldData} to {newData}.",
-			"The {name} has slightly dropped to {newData}.",
-			"The {name} has slightly fallen about {difference}."
+			"{name} has slightly dropped from {oldData} to {newData}.",
+			"{name} has slightly dropped to {newData}.",
+			"{name} has slightly fallen about {difference}."
 		],
 		"0": [
-			"The {name} is the same."
+			"{name} is the same."
 		],
 		"1": [
-			"We upgraded the {name} from {oldData} to {newData}.",
-			"The {name} has slightly raised to {newData}.",
-			"The {name} has raised slightly to {newData}.",
-			"The {name} has increased a bit to {newData}."
+			"We upgraded {name} from {oldData} to {newData}.",
+			"{name} has slightly raised to {newData}.",
+			"{name} has raised slightly to {newData}.",
+			"{name} has increased a bit to {newData}."
 		],
 		"2": [
-			"The {name} has raised from {oldData} to {newData}.",
-			"The {name} has raised to {newData}.",
-			"The {name} has raised for {difference}."
+			"{name} has raised from {oldData} to {newData}.",
+			"{name} has raised to {newData}.",
+			"{name} has raised for {difference}."
 		],
 		"3": [
-			"The {name} has highly raised from {oldData} to {newData}.",
-			"The {name} has highly raised to {newData}.",
-			"The {name} has highly raised for {difference}.",
-			"The {name} are up {difference}."
+			"{name} has highly raised from {oldData} to {newData}.",
+			"{name} has highly raised to {newData}.",
+			"{name} has highly raised for {difference}.",
+			"{name} are up {difference}."
 		],
 		"4": [
-			"The {name} has greatly raised from {oldData} to {newData}.",
-			"The {name} has greatly raised to {newData}.",
-			"The {name} has greatly raised for {difference}."
+			"{name} has greatly raised from {oldData} to {newData}.",
+			"{name} has greatly raised to {newData}.",
+			"{name} has greatly raised for {difference}."
 		],
 		"5": [
-			"The {name} has extremely raised from {oldData} to {newData}.",
-			"The {name} has extremely raised to {newData}.",
-			"The {name} has extremely raised for {difference}.",
-			"The {name} rose as much as {difference}."
+			"{name} has extremely raised from {oldData} to {newData}.",
+			"{name} has extremely raised to {newData}.",
+			"{name} has extremely raised for {difference}.",
+			"{name} rose as much as {difference}."
 		]
 	},
 	"qualitative": {
 		"null": [
-			"null case"
+			"We cannot conclude {name}."
 		],
 		"5": [
-			"The {name} is {newData}. (5)"
+			"{name} is {newData}. (5)"
 		],
 		"4": [
-			"The {name} is {newData}. (4)"
+			"{name} is {newData}. (4)"
 		],
 		"3": [
-			"The {name} is {newData}. (3)"
+			"{name} is {newData}. (3)"
 		],
 		"2": [
-			"The {name} is {newData}. (2)"
+			"{name} is {newData}. (2)"
 		],
 		"1": [
-			"The {name} is {newData}. (1)"
+			"{name} is {newData}. (1)"
 		],
 		"0": [
-			"The {name} is still {newData}. (0)"
+			"{name} is still {newData}. (0)"
 		],
 		"-1": [
-			"The {name} is {newData}. (-1)"
+			"{name} is {newData}. (-1)"
 		],
 		"-2": [
-			"The {name} is {newData}. (-2)"
+			"{name} is {newData}. (-2)"
 		],
 		"-3": [
-			"The {name} is {newData}. (-3)"
+			"{name} is {newData}. (-3)"
 		],
 		"-4": [
-			"The {name} is {newData}. (-4)"
+			"{name} is {newData}. (-4)"
 		],
 		"-5": [
-			"The {name} is {newData}. (-5)"
+			"{name} is {newData}. (-5)"
 		]
 	},
 	"jitta_line": {
 		"Above_Above": {
 			"5": [
-				"The {name} has improved from {oldNumber}% to {newData}."
+				"{name} has improved from {oldNumber}% to {newData}."
 			],
 			"4": [
-				"The {name} has raised from {oldNumber}% to {newData}."
+				"{name} has raised from {oldNumber}% to {newData}."
 			],
 			"3": [
-				"The {name} has changed from {oldNumber}% to {newData}."
+				"{name} has changed from {oldNumber}% to {newData}."
 			],
 			"2": [
-				"The {name} has slightly raised from {oldNumber}% to {newData}."
+				"{name} has slightly raised from {oldNumber}% to {newData}."
 			],
 			"1": [
-				"The {name} has slightly changed from {oldNumber}% to {newData}."
+				"{name} has slightly changed from {oldNumber}% to {newData}."
 			],
 			"0": [
-				"The {name} has changed from {oldNumber}% to {newData}."
+				"{name} has changed from {oldNumber}% to {newData}."
 			],
 			"-1": [
-				"The {name} has slightly decreased from {oldNumber}% to {newData}."
+				"{name} has slightly decreased from {oldNumber}% to {newData}."
 			],
 			"-2": [
-				"The {name} has fallen to {newData}."
+				"{name} has fallen to {newData}."
 			],
 			"-3": [
-				"The {name} has decreased from {oldNumber}% to {newData}."
+				"{name} has decreased from {oldNumber}% to {newData}."
 			],
 			"-4": [
-				"The {name} has changed from {oldNumber}% to {newData}."
+				"{name} has changed from {oldNumber}% to {newData}."
 			],
 			"-5": [
-				"The {name} has changed from {oldNumber}% to {newData}."
+				"{name} has changed from {oldNumber}% to {newData}."
 			]
 		},
 		"Above_Below": {
 			"-5": [
-				"The {name} has fallen from {oldData} to {newData}."
+				"{name} has fallen from {oldData} to {newData}."
 			],
 			"-4": [
-				"The {name} has fallen from {oldData} to {newData}."
+				"{name} has fallen from {oldData} to {newData}."
 			],
 			"-3": [
-				"The {name} has fallen from {oldData} to {newData}."
+				"{name} has fallen from {oldData} to {newData}."
 			],
 			"-2": [
-				"The {name} has fallen from {oldData} to {newData}."
+				"{name} has fallen from {oldData} to {newData}."
 			],
 			"-1": [
-				"The {name} has fallen from {oldData} to {newData}."
+				"{name} has fallen from {oldData} to {newData}."
 			],
 			"0": [
-				"The {name} has fallen from {oldData} to {newData}."
+				"{name} has fallen from {oldData} to {newData}."
 			]
 		},
 		"Below_Above": {
 			"5": [
-				"The {name} has improved from {oldData} to {newData}."
+				"{name} has improved from {oldData} to {newData}."
 			],
 			"4": [
-				"The {name} has improved from {oldData} to {newData}."
+				"{name} has improved from {oldData} to {newData}."
 			],
 			"3": [
-				"The {name} has improved from {oldData} to {newData}."
+				"{name} has improved from {oldData} to {newData}."
 			],
 			"2": [
-				"The {name} has improved from {oldData} to {newData}."
+				"{name} has improved from {oldData} to {newData}."
 			],
 			"1": [
-				"The {name} has improved from {oldData} to {newData}."
+				"{name} has improved from {oldData} to {newData}."
 			],
 			"0": [
-				"The {name} has improved from {oldData} to {newData}."
+				"{name} has improved from {oldData} to {newData}."
 			]
 		},
 		"Below_Below": {
 			"5": [
-				"The {name} has improved from {oldNumber}% to {newData}."
+				"{name} has improved from {oldNumber}% to {newData}."
 			],
 			"4": [
-				"The {name} has upgraded from {oldNumber}% to {newData}."
+				"{name} has upgraded from {oldNumber}% to {newData}."
 			],
 			"3": [
-				"The {name} has changed from {oldNumber}% to {newData}."
+				"{name} has changed from {oldNumber}% to {newData}."
 			],
 			"2": [
-				"The {name} has slightly upgraded from {oldNumber}% to {newData}."
+				"{name} has slightly upgraded from {oldNumber}% to {newData}."
 			],
 			"1": [
-				"The {name} has slightly changed from {oldNumber}% to {newData}."
+				"{name} has slightly changed from {oldNumber}% to {newData}."
 			],
 			"0": [
-				"The {name} has changed from {oldNumber}% to {newData}."
+				"{name} has changed from {oldNumber}% to {newData}."
 			],
 			"-1": [
-				"The {name} has slightly decreased from {oldNumber}% to {newData}."
+				"{name} has slightly decreased from {oldNumber}% to {newData}."
 			],
 			"-2": [
-				"The {name} has fallen to {newData}."
+				"{name} has fallen to {newData}."
 			],
 			"-3": [
-				"The {name} has decreased from {oldNumber}% to {newData}."
+				"{name} has decreased from {oldNumber}% to {newData}."
 			],
 			"-4": [
-				"The {name} has changed from {oldNumber}% to {newData}."
+				"{name} has changed from {oldNumber}% to {newData}."
 			],
 			"-5": [
-				"The {name} has changed from {oldNumber}% to {newData}."
+				"{name} has changed from {oldNumber}% to {newData}."
 			]
 		}
 	}

@@ -3,7 +3,7 @@ require "coffee-script"
 
 oldData = require("./old.json")
 newData = require("./new.json")
-words = require("./words.json").words
+words = require("./words.json")
 settings = require("./settings.json")
 sentences = require("./sentences.json")
 
@@ -20,12 +20,16 @@ class JittaData
     pattern = _.sample(patterns)
     for key of data
       pattern = pattern.replace("{" + key + "}", data[key])
-    pattern
+    @capitalize(pattern)
+
+  capitalize: (data) ->
+    data.charAt(0).toUpperCase() + data.slice(1);
 
 class JittaPrice extends JittaData
 
   constructor: (name, oldData, newData) ->
     @name = name
+    @displayName = "the price"
     @oldData = oldData
     @newData = newData
     @priority = @getPriority()
@@ -50,7 +54,7 @@ class JittaPrice extends JittaData
   buildSentence: () ->
     index = @getLevel()
     data = {
-      name: @name.toLowerCase(),
+      name: @displayName,
       oldData: @oldData,
       newData: @newData,
       difference: @getDisplayDifference()
@@ -119,24 +123,27 @@ class JittaSign extends JittaData
     @replaceStr(sentences.qualitative[index], data)
 
   getLevel: () ->
-    if(@oldData == null && @newData == null)
-      "null"
+    oldLevel = @getDataLevel(@oldData)
+    newLevel = @getDataLevel(@newData)
+    if(newLevel == null)
+      return "null"
     else
-      oldLevel = @getDataLevel(@oldData)
-      newLevel = @getDataLevel(@newData)
       (newLevel - oldLevel).toString()
 
   getDataLevel: (data) ->
     if(data == null)
-      0
-    else
-      result = _.findWhere(words, {word: data})
-      result.score
+      return null
+    for item of words[@name]
+      pattern = new RegExp(item, "g");
+      if pattern.test(data)
+        return words[@name][item]
+    return null
 
 class JittaFactor extends JittaPrice
 
   constructor: (name, oldData, newData) ->
     @name = name
+    @displayName = name
     @oldData = oldData
     @newData = newData
     @max = @getMax()
@@ -204,7 +211,7 @@ class JittaLine extends JittaFactor
     status = @getLevelStatus()
     index = @getLevel()
     data = {
-      name: "price",
+      name: "the price",
       oldData: @oldDataFull.toLowerCase(),
       newData: @newDataFull.toLowerCase(),
       oldNumber: Math.abs(@oldData),
@@ -218,29 +225,41 @@ listofSentences = {
   qualitative: []
 }
 
-for factor of oldData.qualitative
-  a = new JittaSign(factor, oldData.qualitative[factor], newData.qualitative[factor]);
+init = ->
+  for factor of oldData.qualitative
+    a = new JittaSign(factor, oldData.qualitative[factor], newData.qualitative[factor]);
+    if(a.update)
+      listofSentences.qualitative.push(a)
+
+  for factor of oldData.quantitative
+    a = new JittaFactor(factor, oldData.quantitative[factor], newData.quantitative[factor]);
+    if(a.update)
+      listofSentences.quantitative.push(a)
+
+  a = new JittaLine("Jitta Line", oldData.jitta["Jitta Line"], newData.jitta["Jitta Line"])
   if(a.update)
-    listofSentences.qualitative.push(a)
+    listofSentences.jitta.push(a)
 
-for factor of oldData.quantitative
-  a = new JittaFactor(factor, oldData.quantitative[factor], newData.quantitative[factor]);
+  a = new JittaPrice("Price", oldData.jitta["Price"], newData.jitta["Price"])
   if(a.update)
-    listofSentences.quantitative.push(a)
+    listofSentences.jitta.push(a)
 
-a = new JittaLine("Jitta Line", oldData.jitta["Jitta Line"], newData.jitta["Jitta Line"])
-if(a.update)
-  listofSentences.jitta.push(a)
+  for type of listofSentences
+    listofSentences[type] = _.sortBy(listofSentences[type], (item) ->
+      item.priority
+    )
+  printSentences()
 
-a = new JittaPrice("Price", oldData.jitta["Price"], newData.jitta["Price"])
-if(a.update)
-  listofSentences.jitta.push(a)
+printSentences = ->
+  for type of listofSentences
+    for i of listofSentences[type]
+      console.log listofSentences[type][i].update
 
-for type of listofSentences
-  listofSentences[type] = _.sortBy(listofSentences[type], (item) ->
-    item.priority
-  )
+testMatch = (key) ->
+  for item of words[key]
+    pattern = new RegExp(item, "g");
+    # console.log item
+    if pattern.test("High A B D High .* in the past 5 years")
+      return words[key][item]
 
-for type of listofSentences
-  for i of listofSentences[type]
-    console.log listofSentences[type][i].update
+init()
