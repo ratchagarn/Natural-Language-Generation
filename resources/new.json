@@ -1,0 +1,25 @@
+{
+	"jitta": {
+		"Jitta Line": "47.28% Below Jitta Line",
+		"Price": 33.25,
+		"Currency": "baht",
+		"Jitta Score": 7.25
+	},
+	"quantitative": {
+		"Loss Chance": 45.8,
+		"Growth Opportunity": 70,
+		"Recent Business Performance": 85,
+		"Financial Strength": 79,
+		"Return to Share Holder": 70,
+		"Competitive Advantage": 85
+	},
+	"qualitative": {
+		"Revenue and Earning": "Earning Declined",
+		"Operating Margin": "Declined",
+		"Debt Level": "Low Long Term Debt",
+		"Return on Equity": null,
+		"Dividend Payout": "Every year",
+		"Share Repurchase": null,
+		"CapEx": null
+	}
+}

@@ -1,11 +1,11 @@
 _ = require("underscore")
 require "coffee-script"
 
-oldData = require("./old.json")
-newData = require("./new.json")
-words = require("./words.json")
-settings = require("./settings.json")
-sentences = require("./sentences.json")
+oldData = require("./resources/old.json")
+newData = require("./resources/new.json")
+words = require("./resources/words.json")
+settings = require("./resources/settings.json")
+sentences = require("./resources/sentences.json")
 
 # JittaData = require("./JittaData")
 
@@ -34,10 +34,14 @@ class JittaPrice extends JittaData
     @newData = newData
     @priority = @getPriority()
     @sensitiveness = @getSensitiveness()
+    @postfix = @getPostfix()
     @update = @getUpdate()
 
   getPriority: () ->
     settings.jitta[@name].priority
+
+  getPostfix: () ->
+    " " + oldData.jitta.Currency
 
   getSensitiveness: () ->
     settings.jitta[@name].sensitiveness
@@ -55,8 +59,8 @@ class JittaPrice extends JittaData
     index = @getLevel()
     data = {
       name: @displayName,
-      oldData: @oldData,
-      newData: @newData,
+      oldData: @oldData + @postfix,
+      newData: @newData + @postfix,
       difference: @getDisplayDifference()
     }
     @replaceStr(sentences.quantitative[index], data)
@@ -78,7 +82,7 @@ class JittaPrice extends JittaData
     boundedDiff
 
   getDisplayDifference: () ->
-    Math.abs(@newData - @oldData)
+    Math.abs(@newData - @oldData).toFixed(2) + @postfix
 
 class JittaSign extends JittaData
 
@@ -150,7 +154,11 @@ class JittaFactor extends JittaPrice
     @min = @getMin()
     @priority = @getPriority()
     @sensitiveness = @getSensitiveness()
+    @postfix = @getPostfix()
     @update = @getUpdate()
+
+  getPostfix: () ->
+    "%"
 
   getMax: () ->
     settings.quantitative[@name].max
@@ -168,10 +176,18 @@ class JittaFactor extends JittaPrice
     settings.quantitative[@name].always_show
 
   getDisplayDifference: () ->
-    Math.abs(@newData - @oldData).toFixed(2)
+    Math.abs(@newData - @oldData).toFixed(0) + @postfix
 
   getBoundedDifference: () ->
     (@newData - @oldData)/(@max - @min)
+
+class JittaScore extends JittaFactor
+
+  constructor: (name, oldData, newData) ->
+    super
+
+  getPostfix: () ->
+    ""
 
 class JittaLine extends JittaFactor
 
@@ -241,6 +257,10 @@ init = ->
     listofSentences.jitta.push(a)
 
   a = new JittaPrice("Price", oldData.jitta["Price"], newData.jitta["Price"])
+  if(a.update)
+    listofSentences.jitta.push(a)
+
+  a = new JittaScore("Jitta Score", oldData.jitta["Jitta Score"], newData.jitta["Jitta Score"])
   if(a.update)
     listofSentences.jitta.push(a)
 

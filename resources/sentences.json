@@ -1,0 +1,222 @@
+{
+    "quantitative": {
+        "0": [
+            "{name} is the same.",
+            "{name} is solid at {newData}"
+        ],
+        "1": [
+            "We upgraded {name} from {oldData} to {newData}.",
+            "{name} has slightly raised to {newData}.",
+            "{name} has raised slightly to {newData}.",
+            "{name} has increased a bit to {newData}."
+        ],
+        "2": [
+            "{name} has raised from {oldData} to {newData}.",
+            "{name} has raised to {newData}.",
+            "{name} has raised for {difference}.",
+            "{name} is up for {difference}.",
+            "{name} looks good at {newData}."
+        ],
+        "3": [
+            "{name} has highly raised from {oldData} to {newData}.",
+            "{name} has highly raised to {newData}.",
+            "{name} has highly raised for {difference}.",
+            "{name} is up {difference}.",
+            "{name} has a solid increase."
+        ],
+        "4": [
+            "{name} has greatly raised from {oldData} to {newData}.",
+            "{name} has greatly raised to {newData}.",
+            "{name} has greatly raised for {difference}.",
+            "{name} is up {difference}."
+        ],
+        "5": [
+            "{name} has extremely raised from {oldData} to {newData}.",
+            "{name} has extremely raised to {newData}.",
+            "{name} has significantly raised for {difference}.",
+            "{name} has significantly increased by {difference} to {newData}.",
+            "{name} rose as much as {difference}.",
+            "Its {name} has soared from {oldData} to {newData}, a {difference} increase."
+        ],
+        "-5": [
+            "{name} has significantly dropped from {oldData} to {newData}.",
+            "{name} has significantly decreased by {difference} to {newData}.",
+            "{name} has extremely dropped to {newData}.",
+            "{name} has extremely dropped for {difference}."
+        ],
+        "-4": [
+            "{name} has greatly dropped from {oldData} to {newData}.",
+            "{name} has greatly dropped to {newData}.",
+            "{name} has greatly dropped for {difference}.",
+            "{name} has a decrease of {difference}."
+        ],
+        "-3": [
+            "{name} is down from from {oldData} to {newData}.",
+            "{name} continues to narrow, to {newData} from {oldData}."
+        ],
+        "-2": [
+            "{name} has dropped from {oldData} to {newData}.",
+            "{name} has dropped to {newData}.",
+            "{name} has dropped for {difference}."
+        ],
+        "-1": [
+            "{name} has slightly dropped from {oldData} to {newData}.",
+            "{name} has slightly dropped to {newData}.",
+            "{name} has slightly fallen about {difference}."
+        ]
+    },
+    "qualitative": {
+        "0": [
+            "{name} is still {newData}. (0)",
+            "{name} continues to be {newData}."
+        ],
+        "1": [
+            "{name} is {newData}. (1)",
+            "{name} has improved slightly to {newData}."
+        ],
+        "2": [
+            "{name} is {newData}. (2)"
+        ],
+        "3": [
+            "{name} is {newData}. (3)"
+        ],
+        "4": [
+            "{name} is {newData}. (4)",
+            "The current analytical data suggests that {name} is {newData}."
+        ],
+        "5": [
+            "{name} is {newData}. (5)"
+        ],
+        "null": [
+            "We cannot conclude {name}."
+        ],
+        "-1": [
+            "{name} is {newData}. (-1)"
+        ],
+        "-2": [
+            "{name} is {newData}. (-2)"
+        ],
+        "-3": [
+            "{name} is {newData}. (-3)"
+        ],
+        "-4": [
+            "{name} is {newData}. (-4)"
+        ],
+        "-5": [
+            "{name} is {newData}. (-5)"
+        ]
+    },
+    "jitta_line": {
+        "Above_Above": {
+            "0": [
+                "{name} has changed from {oldNumber}% to {newData}."
+            ],
+            "1": [
+                "{name} has slightly changed from {oldNumber}% to {newData}."
+            ],
+            "2": [
+                "{name} has slightly raised from {oldNumber}% to {newData}."
+            ],
+            "3": [
+                "{name} has changed from {oldNumber}% to {newData}."
+            ],
+            "4": [
+                "{name} has raised from {oldNumber}% to {newData}."
+            ],
+            "5": [
+                "{name} has improved from {oldNumber}% to {newData}."
+            ],
+            "-1": [
+                "{name} has slightly decreased from {oldNumber}% to {newData}."
+            ],
+            "-2": [
+                "{name} has fallen to {newData}."
+            ],
+            "-3": [
+                "{name} has decreased from {oldNumber}% to {newData}."
+            ],
+            "-4": [
+                "{name} has changed from {oldNumber}% to {newData}."
+            ],
+            "-5": [
+                "{name} has changed from {oldNumber}% to {newData}."
+            ]
+        },
+        "Above_Below": {
+            "0": [
+                "{name} has fallen from {oldData} to {newData}."
+            ],
+            "-5": [
+                "{name} has fallen from {oldData} to {newData}."
+            ],
+            "-4": [
+                "{name} has fallen from {oldData} to {newData}."
+            ],
+            "-3": [
+                "{name} has fallen from {oldData} to {newData}."
+            ],
+            "-2": [
+                "{name} has fallen from {oldData} to {newData}."
+            ],
+            "-1": [
+                "{name} has fallen from {oldData} to {newData}."
+            ]
+        },
+        "Below_Above": {
+            "0": [
+                "{name} has improved from {oldData} to {newData}."
+            ],
+            "1": [
+                "{name} has improved from {oldData} to {newData}."
+            ],
+            "2": [
+                "{name} has improved from {oldData} to {newData}."
+            ],
+            "3": [
+                "{name} has improved from {oldData} to {newData}."
+            ],
+            "4": [
+                "{name} has improved from {oldData} to {newData}."
+            ],
+            "5": [
+                "{name} has improved from {oldData} to {newData}."
+            ]
+        },
+        "Below_Below": {
+            "0": [
+                "{name} has changed from {oldNumber}% to {newData}."
+            ],
+            "1": [
+                "{name} has slightly changed from {oldNumber}% to {newData}."
+            ],
+            "2": [
+                "{name} has slightly upgraded from {oldNumber}% to {newData}."
+            ],
+            "3": [
+                "{name} has changed from {oldNumber}% to {newData}."
+            ],
+            "4": [
+                "{name} has upgraded from {oldNumber}% to {newData}."
+            ],
+            "5": [
+                "{name} has improved from {oldNumber}% to {newData}.",
+                "{name} has jumped from {oldNumber}% to {newData}."
+            ],
+            "-1": [
+                "{name} has slightly decreased from {oldNumber}% to {newData}."
+            ],
+            "-2": [
+                "{name} has fallen to {newData}."
+            ],
+            "-3": [
+                "{name} has decreased from {oldNumber}% to {newData}."
+            ],
+            "-4": [
+                "{name} has changed from {oldNumber}% to {newData}."
+            ],
+            "-5": [
+                "{name} has changed from {oldNumber}% to {newData}."
+            ]
+        }
+    }
+}
