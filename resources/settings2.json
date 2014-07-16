@@ -1,0 +1,31 @@
+{
+	"Jitta Score": {
+		"priority": {
+			"init": 1,
+			"negativeFactor": 20,
+			"positiveFactor": 100
+		},
+		"level": {
+			"threshold": 0.09,
+			"sensitiveness": 1
+		},
+		"dataGroup": "score",
+		"displayGroup": "score",
+		"precision": 1
+	},
+	"Price": {
+		"priority": {
+			"init": 2,
+			"negativeFactor": 2,
+			"positiveFactor": 1
+		},
+		"level": {
+			"threshold": 5,
+			"sensitiveness": 5
+		},
+		"valueSensitiveness": 0.5,
+		"dataGroup": "price",
+		"displayGroup": "price",
+		"precision": 0
+	}
+}

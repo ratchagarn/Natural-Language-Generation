@@ -1,0 +1,17 @@
+{
+	"data": [
+		{
+			"title": "Price",
+			"oldData": 95.22,
+			"newData": 79.18,
+			"currency": "baht",
+			"alwaysShow": false
+		},
+		{
+			"title": "Jitta Score",
+			"oldData": 7.10,
+			"newData": 6.97,
+			"alwaysShow": true
+		}
+	]
+}

@@ -1,0 +1,53 @@
+{
+	"simpleSentences": {
+		"score": {
+			"positive": {
+				"1": [],
+				"2": [],
+				"3": [
+					"{name} is {newNumber}",
+					"{name} has increased from {oldNumber} to {newNumber}"
+				]
+			},
+			"neutral": {
+				"0": []
+			},
+			"negative": {
+				"-1": [],
+				"-2": [],
+				"-3": []
+			}
+		},
+		"price": {}
+	},
+	"compoundSentences": {
+		"score": {
+			"positive_positive": [
+				"{name.1} and {name.2} has increased"
+			],
+			"positive_negative": [
+				"{name.1} has increased but {name.2} has decreased"
+			],
+			"negative_negative": [
+				"{name.1} and {name.2} has decreased"
+			],
+			"positive_positive_positive": [
+				"{name.1}, {name.2} and {name.3} has increased"
+			]
+		},
+		"price": {
+			"positive_positive": [
+				"{name.1} and {name.2} has increased"
+			],
+			"positive_negative": [
+				"{name.1} has increased but {name.2} has decreased"
+			],
+			"negative_negative": [
+				"{name.1} and {name.2} has decreased"
+			],
+			"positive_positive_positive": [
+				"{name.1}, {name.2} and {name.3} has increased"
+			]
+		}
+	}
+}
