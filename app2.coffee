@@ -26,6 +26,7 @@
 
 config = require("./resources/config.coffee")
 settings = require("./resources/settings2.json")
+sentences = require("./resources/sentences2.json")
 input = require("./resources/input.json")
 _ = require("underscore")
 
@@ -37,11 +38,10 @@ _ = require("underscore")
 generate = (data, nData) ->
   data = getAttrs(data)
   data = selectData(data, nData)
-  console.log data
-  return
-
-# result = buildSentences(data[type]);
-#return result;
+  # console.log data
+  result = buildSentences(data);
+  console.log result
+  return result.join(' ');
 
 ###
 Add more required attributes
@@ -50,12 +50,17 @@ Add more required attributes
 ###
 getAttrs = (data) ->
   for i of data
-    data[i].dataGroup = settings[data[i].title].dataGroup
+    if(settings[data[i].title])
+      name = data[i].title
+    else
+      name = 'default'
+    data[i].dataGroup = settings[name].dataGroup
     data[i].difference = getDifference(data[i])
-    data[i].displayGroup = settings[data[i].title].displayGroup
-    data[i].displayInfo = getDisplayInfo(data[i], settings[data[i].title])
-    data[i].priority = calculatePriority(data[i], settings[data[i].title])
-    data[i].level = calculateLevel(data[i], settings[data[i].title])
+    data[i].sentenceGroup = settings[name].sentenceGroup
+    data[i].contentGroup = settings[name].contentGroup
+    data[i].displayInfo = getDisplayInfo(data[i], settings[name])
+    data[i].priority = calculatePriority(data[i], settings[name])
+    data[i].level = calculateLevel(data[i], settings[name])
     data[i].type = calculateType(data[i].level)
   data
 
@@ -66,7 +71,12 @@ Get the difference between old value and current value
 @return {object} difference value
 ###
 getDifference = (data) ->
-  config[data.dataGroup].getDifference(data.newData, data.oldData)
+  # Override
+  if(config[data.dataGroup] && config[data.dataGroup].getDifference)
+    console.log("Override " + data.title + " for getDifference")
+    return config[data.dataGroup].getDifference(data.newData, data.oldData);
+  # Default
+  data.newData - data.oldData
 
 ###
 Prepare strings required to show in the sentence
@@ -75,7 +85,18 @@ Prepare strings required to show in the sentence
 @return {object} information required to display in the sentence
 ###
 getDisplayInfo = (data, settings) ->
-  config[data.dataGroup].getDisplayInfo(data, settings)
+  # Override
+  if(config[data.dataGroup] && config[data.dataGroup].getDisplayInfo)
+    console.log("Override " + data.title + " for getDisplayInfo")
+    return config[data.dataGroup].getDisplayInfo(data, settings)
+  # Default
+  precision = settings.precision
+  result = {}
+  result.title = data.title.toLowerCase()
+  result.oldData = data.oldData.toFixed(precision)
+  result.newData = data.newData.toFixed(precision)
+  result.difference = Math.abs(data.difference).toFixed(precision)
+  result
 
 ###
 Calculate the priority of change
@@ -84,10 +105,18 @@ Calculate the priority of change
 @return {number} new priority
 ###
 calculatePriority = (data, settings) ->
-  # override initial priority
-  if (! typeof(data.priority) == undefined)
-    settings.priority.init = data.priority
-  config[data.dataGroup].calculatePriority(data.difference, settings.priority)
+  # Override
+  if(config[data.dataGroup] && config[data.dataGroup].calculatePriority)
+    console.log("Override " + data.title + " for calculatePriority")
+    settings.priority.init = data.priority if(! typeof(data.priority) == undefined)
+    return config[data.dataGroup].calculatePriority(data.difference, settings.priority)
+  # Default
+  prioritySettings = settings.priority
+  if(data.difference > 0)
+    newPriority = prioritySettings.init + (prioritySettings.positiveFactor * data.difference)
+  else
+    newPriority = prioritySettings.init + (prioritySettings.negativeFactor * Math.abs(data.difference))
+  parseInt(newPriority.toFixed(0))
 
 
 ###
@@ -97,7 +126,20 @@ Calculate the intesity of change
 @return {number} intensity of the change
 ###
 calculateLevel = (data, settings) ->
-  config[data.dataGroup].calculateLevel(data.difference, settings.level)
+  # Override
+  if(config[data.dataGroup] && config[data.dataGroup].calculateLevel)
+    console.log("Override " + data.title + " for calculateLevel")
+    return config[data.dataGroup].calculateLevel(data.difference, settings.level)
+  # Default
+  levelSettings = settings.level
+  absoluteDifference = Math.abs(data.difference)
+  if(absoluteDifference < levelSettings.threshold)
+    level = 0
+  else
+    level = Math.ceil(data.difference/levelSettings.sensitiveness)
+    level = 3 if(level > 3)
+    level = -3 if(level < -3)
+  level
 
 
 calculateType = (level) ->
@@ -136,34 +178,94 @@ groupData = (data) ->
 #
 # Sentence Generation
 # 
+
+###
+Group data into contentGroups and loop through each
+contentGroup to create sentence(s)
+@param  {array} data - array sorted by priority but not grouped
+@return {array} array of sentences
+###
 buildSentences = (data) ->
-  result = ""
-  data = _.indexBy(data, "group")
+  result = []
+  data = _.groupBy(data, "contentGroup")
   for group of data
-    if data[group].length < 2
-      result = result + " " + buildSimpleSentence(data[group][0])
+    if(data[group].length > 2)
+      i = 0
+      while i < data[group].length
+        if i + 1 is data[group].length
+          result.push(buildCompoundSentence([data[group][i]]))
+        else
+          result.push(buildCompoundSentence([data[group][i], data[group][parseInt(i)+1]]))
+        i = i + 2
     else
-      typeGroupedData = _.indexBy(data[group], "type")
-      for type of typeGroupedData
-        result = result + " " + buildCompoundSentence(typeGroupedData[type])
+      result.push(buildCompoundSentence(data[group]))
   result
+
 buildSimpleSentence = (data) ->
-  0
+  if(sentences.simpleSentences[data.sentenceGroup] && sentences.simpleSentences[data.sentenceGroup][data.type] && sentences.simpleSentences[data.sentenceGroup][data.level.toString()])
+    return replaceStr(sentences.simpleSentences[data.sentenceGroup][data.type][data.level.toString()], data.displayInfo)
+  replaceStr(sentences.simpleSentences['default'][data.type][data.level.toString()], data.displayInfo)
+
 buildCompoundSentence = (data) ->
-  0
+  types = _.pluck(data, 'type');
+  type = types.join('_')
+  console.log type
+  moreData = _.pluck(addSimpleSentence(data), 'displayInfo');
+  selectedSentences = _.find(sentences.compoundSentences, (group) ->
+    _.contains(group.type, type);
+  )
+  # selectedSentences = _.findWhere(sentences.compoundSentences, {newsroom: "The New York Times"});
+  # console.log moreData
+  capitalize(replaceCombinedStr(selectedSentences.sentences, moreData))
+  # if(sentences.compound && sentences.compound[type] && sentences.compound[type])
+  #   return replaceStr(sentences.simpleSentences[group][type][data.level.toString()], data.displayInfo)
+  # replaceStr(sentences.simpleSentences['default'][data.type][data.level.toString()], data.displayInfo)
+
+
+addSimpleSentence = (data) ->
+  for i of data
+    data[i].displayInfo.sentence = buildSimpleSentence(data[i])
+  data
+###
+Replace sentence pattern with string in data object
+(single sentence, no capitalization or full stop)
+@param  {array}  patterns - array of sentences
+@param  {object} data - displayInfo object
+@return {string} final sentence
+###
+replaceStr = (patterns, data) ->
+  pattern = _.sample(patterns)
+  for key of data
+    pattern = pattern.replace("{" + key + "}", data[key])
+  pattern
+
+###
+Replace sentence pattern with string in data object
+(combined sentence, with capitalization and full stop)
+@param  {array}  patterns - array of sentences
+@param  {array}  data - array of displayInfo object
+@return {string} final sentence
+###
+replaceCombinedStr = (patterns, data) ->
+  pattern = _.sample(patterns)
+  for i of data
+      for key of data[i]
+        pattern = pattern.replace("{" + key + "." + i + "}", data[i][key])
+  pattern
+
+###
+Change the first character of the string to capital
+@param  {string} data
+@return {string} capitalized string
+###
+capitalize = (data) ->
+  data.charAt(0).toUpperCase() + data.slice(1);
 
 #
 # ตัวอย่าง input ของ generate function
 # 
 # input = [
-
-# {
-# 	title: 'Loss Chance',
-# 	oldData: 18.8,
-# 	newData: 19.8,
-# 	alwaysShow: false
-# },
-generate(input.data, 2)
+generate(input.data, 50)
 
 #
 #generate

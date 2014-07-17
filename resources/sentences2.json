@@ -1,53 +1,85 @@
 {
-	"simpleSentences": {
-		"score": {
-			"positive": {
-				"1": [],
-				"2": [],
-				"3": [
-					"{name} is {newNumber}",
-					"{name} has increased from {oldNumber} to {newNumber}"
-				]
-			},
-			"neutral": {
-				"0": []
-			},
-			"negative": {
-				"-1": [],
-				"-2": [],
-				"-3": []
-			}
-		},
-		"price": {}
-	},
-	"compoundSentences": {
-		"score": {
-			"positive_positive": [
-				"{name.1} and {name.2} has increased"
-			],
-			"positive_negative": [
-				"{name.1} has increased but {name.2} has decreased"
-			],
-			"negative_negative": [
-				"{name.1} and {name.2} has decreased"
-			],
-			"positive_positive_positive": [
-				"{name.1}, {name.2} and {name.3} has increased"
-			]
-		},
-		"price": {
-			"positive_positive": [
-				"{name.1} and {name.2} has increased"
-			],
-			"positive_negative": [
-				"{name.1} has increased but {name.2} has decreased"
-			],
-			"negative_negative": [
-				"{name.1} and {name.2} has decreased"
-			],
-			"positive_positive_positive": [
-				"{name.1}, {name.2} and {name.3} has increased"
-			]
-		}
-	}
+    "simpleSentences": {
+        "default": {
+            "positive": {
+                "1": [
+                    "{title} has slightly raised to {newData}",
+                    "{title} has raised slightly to {newData}",
+                    "{title} has increased a bit to {newData}"
+                ],
+                "2": [
+                    "{title} has raised from {oldData} to {newData}",
+                    "{title} has raised to {newData}",
+                    "{title} has raised for {difference}",
+                    "{title} has increased by {difference} to {newData}"
+                ],
+                "3": [
+                    "{title} has significantly increased by {difference} to {newData}",
+                    "{title} has extremely raised to {newData}",
+                    "{title} has soared from {oldData} to {newData}, a {difference} increase"
+                ]
+            },
+            "neutral": {
+                "0": [
+                    "{title} is still good at {newData}",
+                    "{title} looks good at {newData}"
+                ]
+            },
+            "negative": {
+                "-1": [
+                    "{title} has slightly dropped to {newData}",
+                    "{title} has slightly fallen about {difference}"
+                ],
+                "-2": [
+                    "{title} has dropped from {oldData} to {newData}",
+                    "{title} has dropped to {newData}"
+                ],
+                "-3": [
+                    "{title} has significantly decreased by {difference} to {newData}",
+                    "{title} has extremely dropped to {newData}"
+                ]
+            }
+        },
+        "score": {},
+        "price": {}
+    },
+    "compoundSentences": [
+        {
+            "type": [
+                "positive",
+                "neutral",
+                "negative"
+            ],
+            "sentences": [
+                "{sentence.0}."
+            ]
+        },
+        {
+            "type": [
+                "positive_negative",
+                "neutral_negative",
+                "negative_positive"
+            ],
+            "sentences": [
+                "{sentence.0}, but {sentence.1}."
+            ]
+        },
+        {
+            "type": [
+                "positive_positive"
+            ],
+            "sentences": [
+                "{name.0} and {name.1} have increased to {newData.0} and {newData.1}.",
+                "{sentence.1}, and {sentence.1}."
+            ]
+        },
+        {
+            "type": [
+                "positive_neutral"
+            ],
+            "sentences": [
+                "positive_neutral"
+            ]
+        }
+    ]
 }

@@ -3,7 +3,7 @@
 		{
 			"title": "Price",
 			"oldData": 95.22,
-			"newData": 79.18,
+			"newData": 80.20,
 			"currency": "baht",
 			"alwaysShow": false
 		},
@@ -12,6 +12,36 @@
 			"oldData": 7.10,
 			"newData": 6.97,
 			"alwaysShow": true
+		},
+		{
+			"title": "Growth Opportunity",
+			"oldData": 90,
+			"newData": 60,
+			"alwaysShow": false
+		},
+		{
+			"title": "Recent Business Performance",
+			"oldData": 35,
+			"newData": 50,
+			"alwaysShow": false
+		},
+		{
+			"title": "Financial Strength",
+			"oldData": 100,
+			"newData": 100,
+			"alwaysShow": false
+		},
+		{
+			"title": "Return to Share Holder",
+			"oldData": 68,
+			"newData": 69,
+			"alwaysShow": false
+		},
+		{
+			"title": "Competitive Advantage",
+			"oldData": 98,
+			"newData": 100,
+			"alwaysShow": false
 		}
 	]
 }

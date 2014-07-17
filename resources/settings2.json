@@ -1,5 +1,5 @@
 {
-	"Jitta Score": {
+	"default": {
 		"priority": {
 			"init": 1,
 			"negativeFactor": 20,
@@ -9,13 +9,29 @@
 			"threshold": 0.09,
 			"sensitiveness": 1
 		},
+		"dataGroup": "default",
+		"sentenceGroup": "default",
+		"contentGroup": "default",
+		"precision": 0
+	},
+	"Jitta Score": {
+		"priority": {
+			"init": 50,
+			"negativeFactor": 20,
+			"positiveFactor": 100
+		},
+		"level": {
+			"threshold": 0.09,
+			"sensitiveness": 1
+		},
 		"dataGroup": "score",
-		"displayGroup": "score",
+		"sentenceGroup": "default",
+		"contentGroup": "score",
 		"precision": 1
 	},
 	"Price": {
 		"priority": {
-			"init": 2,
+			"init": 10,
 			"negativeFactor": 2,
 			"positiveFactor": 1
 		},
@@ -25,7 +41,104 @@
 		},
 		"valueSensitiveness": 0.5,
 		"dataGroup": "price",
-		"displayGroup": "price",
+		"sentenceGroup": "default",
+		"contentGroup": "price",
+		"precision": 0
+	},
+	"Loss Chance": {
+		"priority": {
+			"init": 20,
+			"negativeFactor": 2,
+			"positiveFactor": 1
+		},
+		"level": {
+			"threshold": 1,
+			"sensitiveness": 5
+		},
+		"valueSensitiveness": 0.5,
+		"dataGroup": "loss",
+		"sentenceGroup": "default",
+		"contentGroup": "loss",
+		"precision": 1
+	},
+	"Growth Opportunity": {
+		"priority": {
+			"init": 1,
+			"negativeFactor": 0.1,
+			"positiveFactor": 0.1
+		},
+		"level": {
+			"threshold": 5,
+			"sensitiveness": 10
+		},
+		"valueSensitiveness": 0.5,
+		"dataGroup": "factor",
+		"sentenceGroup": "default",
+		"contentGroup": "factor",
+		"precision": 0
+	},
+	"Recent Business Performance": {
+		"priority": {
+			"init": 1,
+			"negativeFactor": 0.1,
+			"positiveFactor": 0.1
+		},
+		"level": {
+			"threshold": 5,
+			"sensitiveness": 10
+		},
+		"valueSensitiveness": 0.5,
+		"dataGroup": "factor",
+		"sentenceGroup": "default",
+		"contentGroup": "factor",
+		"precision": 0
+	},
+	"Financial Strength": {
+		"priority": {
+			"init": 1,
+			"negativeFactor": 0.1,
+			"positiveFactor": 0.1
+		},
+		"level": {
+			"threshold": 5,
+			"sensitiveness": 10
+		},
+		"valueSensitiveness": 0.5,
+		"dataGroup": "factor",
+		"sentenceGroup": "default",
+		"contentGroup": "factor",
+		"precision": 0
+	},
+	"Return to Share Holder": {
+		"priority": {
+			"init": 1,
+			"negativeFactor": 0.1,
+			"positiveFactor": 0.1
+		},
+		"level": {
+			"threshold": 5,
+			"sensitiveness": 10
+		},
+		"valueSensitiveness": 0.5,
+		"dataGroup": "factor",
+		"sentenceGroup": "default",
+		"contentGroup": "factor",
+		"precision": 0
+	},
+	"Competitive Advantage": {
+		"priority": {
+			"init": 1,
+			"negativeFactor": 1,
+			"positiveFactor": 1
+		},
+		"level": {
+			"threshold": 1,
+			"sensitiveness": 1
+		},
+		"valueSensitiveness": 0.5,
+		"dataGroup": "factor",
+		"sentenceGroup": "default",
+		"contentGroup": "factor",
 		"precision": 0
 	}
 }
