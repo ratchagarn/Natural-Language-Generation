@@ -9,8 +9,8 @@
 			"threshold": 0.09,
 			"sensitiveness": 1
 		},
-		"dataGroup": "default",
-		"sentenceGroup": "default",
+		"dataType": "default",
+		"sentenceType": "default",
 		"contentGroup": "default",
 		"precision": 0
 	},
@@ -24,8 +24,8 @@
 			"threshold": 0.09,
 			"sensitiveness": 1
 		},
-		"dataGroup": "score",
-		"sentenceGroup": "default",
+		"dataType": "score",
+		"sentenceType": "default",
 		"contentGroup": "score",
 		"precision": 1
 	},
@@ -39,9 +39,8 @@
 			"threshold": 5,
 			"sensitiveness": 5
 		},
-		"valueSensitiveness": 0.5,
-		"dataGroup": "price",
-		"sentenceGroup": "default",
+		"dataType": "price",
+		"sentenceType": "default",
 		"contentGroup": "price",
 		"precision": 0
 	},
@@ -55,9 +54,8 @@
 			"threshold": 1,
 			"sensitiveness": 5
 		},
-		"valueSensitiveness": 0.5,
-		"dataGroup": "loss",
-		"sentenceGroup": "default",
+		"dataType": "loss",
+		"sentenceType": "default",
 		"contentGroup": "loss",
 		"precision": 1
 	},
@@ -71,9 +69,8 @@
 			"threshold": 5,
 			"sensitiveness": 10
 		},
-		"valueSensitiveness": 0.5,
-		"dataGroup": "factor",
-		"sentenceGroup": "default",
+		"dataType": "factor",
+		"sentenceType": "default",
 		"contentGroup": "factor",
 		"precision": 0
 	},
@@ -87,9 +84,8 @@
 			"threshold": 5,
 			"sensitiveness": 10
 		},
-		"valueSensitiveness": 0.5,
-		"dataGroup": "factor",
-		"sentenceGroup": "default",
+		"dataType": "factor",
+		"sentenceType": "default",
 		"contentGroup": "factor",
 		"precision": 0
 	},
@@ -103,9 +99,8 @@
 			"threshold": 5,
 			"sensitiveness": 10
 		},
-		"valueSensitiveness": 0.5,
-		"dataGroup": "factor",
-		"sentenceGroup": "default",
+		"dataType": "factor",
+		"sentenceType": "default",
 		"contentGroup": "factor",
 		"precision": 0
 	},
@@ -119,9 +114,8 @@
 			"threshold": 5,
 			"sensitiveness": 10
 		},
-		"valueSensitiveness": 0.5,
-		"dataGroup": "factor",
-		"sentenceGroup": "default",
+		"dataType": "factor",
+		"sentenceType": "default",
 		"contentGroup": "factor",
 		"precision": 0
 	},
@@ -135,10 +129,25 @@
 			"threshold": 1,
 			"sensitiveness": 1
 		},
-		"valueSensitiveness": 0.5,
-		"dataGroup": "factor",
-		"sentenceGroup": "default",
+		"dataType": "factor",
+		"sentenceType": "default",
 		"contentGroup": "factor",
 		"precision": 0
+	},
+	"Revenue and Earning": {
+		"priority": {
+			"init": 1,
+			"negativeFactor": 10,
+			"positiveFactor": 10
+		},
+		"level": {
+			"threshold": 1,
+			"sensitiveness": 1
+		},
+		"dataType": "sign",
+		"sentenceType": "default",
+		"contentGroup": "sign",
+		"precision": null
 	}
+
 }

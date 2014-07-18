@@ -78,7 +78,7 @@
                 "positive_neutral"
             ],
             "sentences": [
-                "positive_neutral"
+                "{sentence.0} and {sentence.1}."
             ]
         }
     ]

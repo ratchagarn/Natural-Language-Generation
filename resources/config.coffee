@@ -1,3 +1,5 @@
+exports.val = require("./config.json")
+
 # Price
 exports.price =
   getDifference: (newData, oldData) ->

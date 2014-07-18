@@ -19,13 +19,12 @@
 # 
 
 #
-# ตัวอย่าง settings
+# ตัวอย่าง config.val
 # 
 # integer
 # 2 dp floating number (e.g. 22.34)
 
 config = require("./resources/config.coffee")
-settings = require("./resources/settings2.json")
 sentences = require("./resources/sentences2.json")
 input = require("./resources/input.json")
 _ = require("underscore")
@@ -50,18 +49,18 @@ Add more required attributes
 ###
 getAttrs = (data) ->
   for i of data
-    if(settings[data[i].title])
+    if(config.val[data[i].title])
       name = data[i].title
     else
       name = 'default'
-    data[i].dataGroup = settings[name].dataGroup
+    data[i].dataType = config.val[name].dataType
     data[i].difference = getDifference(data[i])
-    data[i].sentenceGroup = settings[name].sentenceGroup
-    data[i].contentGroup = settings[name].contentGroup
-    data[i].displayInfo = getDisplayInfo(data[i], settings[name])
-    data[i].priority = calculatePriority(data[i], settings[name])
-    data[i].level = calculateLevel(data[i], settings[name])
-    data[i].type = calculateType(data[i].level)
+    data[i].sentenceType = config.val[name].sentenceType
+    data[i].contentGroup = config.val[name].contentGroup
+    data[i].displayInfo = getDisplayInfo(data[i], config.val[name])
+    data[i].priority = calculatePriority(data[i], config.val[name])
+    data[i].level = calculateLevel(data[i], config.val[name])
+    data[i].levelType = calculateType(data[i].level)
   data
 
 ###
@@ -72,25 +71,25 @@ Get the difference between old value and current value
 ###
 getDifference = (data) ->
   # Override
-  if(config[data.dataGroup] && config[data.dataGroup].getDifference)
+  if(config[data.dataType] && config[data.dataType].getDifference)
     console.log("Override " + data.title + " for getDifference")
-    return config[data.dataGroup].getDifference(data.newData, data.oldData);
+    return config[data.dataType].getDifference(data.newData, data.oldData);
   # Default
   data.newData - data.oldData
 
 ###
 Prepare strings required to show in the sentence
 @param  {object} data
-@param  {object} settings
+@param  {object} config.val
 @return {object} information required to display in the sentence
 ###
-getDisplayInfo = (data, settings) ->
+getDisplayInfo = (data, configVal) ->
   # Override
-  if(config[data.dataGroup] && config[data.dataGroup].getDisplayInfo)
+  if(config[data.dataType] && config[data.dataType].getDisplayInfo)
     console.log("Override " + data.title + " for getDisplayInfo")
-    return config[data.dataGroup].getDisplayInfo(data, settings)
+    return config[data.dataType].getDisplayInfo(data, configVal)
   # Default
-  precision = settings.precision
+  precision = configVal.precision
   result = {}
   result.title = data.title.toLowerCase()
   result.oldData = data.oldData.toFixed(precision)
@@ -101,42 +100,42 @@ getDisplayInfo = (data, settings) ->
 ###
 Calculate the priority of change
 @param  {object} data
-@param  {object} settings
+@param  {object} config.val
 @return {number} new priority
 ###
-calculatePriority = (data, settings) ->
+calculatePriority = (data, configVal) ->
   # Override
-  if(config[data.dataGroup] && config[data.dataGroup].calculatePriority)
+  if(config[data.dataType] && config[data.dataType].calculatePriority)
     console.log("Override " + data.title + " for calculatePriority")
-    settings.priority.init = data.priority if(! typeof(data.priority) == undefined)
-    return config[data.dataGroup].calculatePriority(data.difference, settings.priority)
+    configVal.priority.init = data.priority if(! typeof(data.priority) == undefined)
+    return config[data.dataType].calculatePriority(data.difference, configVal.priority)
   # Default
-  prioritySettings = settings.priority
+  priorityConfig = configVal.priority
   if(data.difference > 0)
-    newPriority = prioritySettings.init + (prioritySettings.positiveFactor * data.difference)
+    newPriority = priorityConfig.init + (priorityConfig.positiveFactor * data.difference)
   else
-    newPriority = prioritySettings.init + (prioritySettings.negativeFactor * Math.abs(data.difference))
+    newPriority = priorityConfig.init + (priorityConfig.negativeFactor * Math.abs(data.difference))
   parseInt(newPriority.toFixed(0))
 
 
 ###
 Calculate the intesity of change
 @param  {object} data
-@param  {object} settings
+@param  {object} config.val
 @return {number} intensity of the change
 ###
-calculateLevel = (data, settings) ->
+calculateLevel = (data, configVal) ->
   # Override
-  if(config[data.dataGroup] && config[data.dataGroup].calculateLevel)
+  if(config[data.dataType] && config[data.dataType].calculateLevel)
     console.log("Override " + data.title + " for calculateLevel")
-    return config[data.dataGroup].calculateLevel(data.difference, settings.level)
+    return config[data.dataType].calculateLevel(data.difference, configVal.level)
   # Default
-  levelSettings = settings.level
+  levelConfig = configVal.level
   absoluteDifference = Math.abs(data.difference)
-  if(absoluteDifference < levelSettings.threshold)
+  if(absoluteDifference < levelConfig.threshold)
     level = 0
   else
-    level = Math.ceil(data.difference/levelSettings.sensitiveness)
+    level = Math.ceil(data.difference/levelConfig.sensitiveness)
     level = 3 if(level > 3)
     level = -3 if(level < -3)
   level
@@ -202,14 +201,14 @@ buildSentences = (data) ->
   result
 
 buildSimpleSentence = (data) ->
-  if(sentences.simpleSentences[data.sentenceGroup] && sentences.simpleSentences[data.sentenceGroup][data.type] && sentences.simpleSentences[data.sentenceGroup][data.level.toString()])
-    return replaceStr(sentences.simpleSentences[data.sentenceGroup][data.type][data.level.toString()], data.displayInfo)
-  replaceStr(sentences.simpleSentences['default'][data.type][data.level.toString()], data.displayInfo)
+  if(sentences.simpleSentences[data.sentenceType] && sentences.simpleSentences[data.sentenceType][data.levelType] && sentences.simpleSentences[data.sentenceType][data.level.toString()])
+    return replaceStr(sentences.simpleSentences[data.sentenceType][data.levelType][data.level.toString()], data.displayInfo)
+  replaceStr(sentences.simpleSentences['default'][data.levelType][data.level.toString()], data.displayInfo)
 
 buildCompoundSentence = (data) ->
-  types = _.pluck(data, 'type');
+  types = _.pluck(data, 'levelType');
   type = types.join('_')
-  console.log type
+  # console.log type
   moreData = _.pluck(addSimpleSentence(data), 'displayInfo');
   selectedSentences = _.find(sentences.compoundSentences, (group) ->
     _.contains(group.type, type);
@@ -219,13 +218,14 @@ buildCompoundSentence = (data) ->
   capitalize(replaceCombinedStr(selectedSentences.sentences, moreData))
   # if(sentences.compound && sentences.compound[type] && sentences.compound[type])
   #   return replaceStr(sentences.simpleSentences[group][type][data.level.toString()], data.displayInfo)
-  # replaceStr(sentences.simpleSentences['default'][data.type][data.level.toString()], data.displayInfo)
+  # replaceStr(sentences.simpleSentences['default'][data.levelType][data.level.toString()], data.displayInfo)
 
 
 addSimpleSentence = (data) ->
   for i of data
     data[i].displayInfo.sentence = buildSimpleSentence(data[i])
   data
+
 ###
 Replace sentence pattern with string in data object
 (single sentence, no capitalization or full stop)
