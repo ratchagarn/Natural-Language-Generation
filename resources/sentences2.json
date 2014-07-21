@@ -41,7 +41,89 @@
             }
         },
         "score": {},
-        "price": {}
+        "price": {},
+        "earning": {
+            "+1": [
+                "{title} is still {newData}"
+            ],
+            "+2": [
+                "{newData} in {title}"
+            ],
+            "+3": [
+                "{newData} in {title}"
+            ],
+            "-2": [
+                "{newData}"
+            ],
+            "-1": [
+                "{newData}"
+            ],
+            "0": [
+                "No update in {title}"
+            ]
+        },
+        "operating": {
+            "positive": [
+                "{title} is {newData}"
+            ],
+            "neutral": [
+                "{title} is still {newData}"
+            ],
+            "negative": [
+                "{title} is {newData}"
+            ]
+        },
+        "debt": {
+            "all": [
+                "there is {newData}"
+            ]
+        },
+        "roe": {
+            "+2": {
+                "+2": [
+                    "{title} is still {newData}"
+                ]
+            },
+            "0": {
+                "+2": [
+                    "{title} is {newData}"
+                ]
+            }
+        },
+        "dividend": {
+            "positive": [
+                "{title} is {newData}"
+            ],
+            "neutral": [
+                "{title} is still {newData}"
+            ],
+            "negative": [
+                "{title} is {newData}"
+            ]
+        },
+        "repurchase": {
+            "+2": {
+                "+2": [
+                    "there is still {title} {newData}"
+                ]
+            },
+            "0": {
+                "+2": [
+                    "there is {title} {newData}"
+                ]
+            }
+        },
+        "capex": {
+            "positive": [
+                "{title} is {newData}"
+            ],
+            "neutral": [
+                "{title} is still {newData}"
+            ],
+            "negative": [
+                "{title} is {newData}"
+            ]
+        }
     },
     "compoundSentences": [
         {
@@ -69,13 +151,15 @@
                 "positive_positive"
             ],
             "sentences": [
-                "{name.0} and {name.1} have increased to {newData.0} and {newData.1}.",
-                "{sentence.1}, and {sentence.1}."
+                "{sentence.0}, and {sentence.1}."
             ]
         },
         {
             "type": [
-                "positive_neutral"
+                "positive_neutral",
+                "negative_negative",
+                "neutral_neutral",
+                "negative_neutral"
             ],
             "sentences": [
                 "{sentence.0} and {sentence.1}."

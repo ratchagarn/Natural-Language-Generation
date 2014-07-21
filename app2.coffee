@@ -14,9 +14,7 @@
 # 2. Sentence Generation
 # ข้อมูลที่ได้จากขั้นตอนข้างบนจะถูกเอาไปกรุ๊ปตาม group ของข้อมูล เพื่อดูว่ามีข้อมูลไหนจัดกลุ่มเข้าด้วยกันได้บ้าง จากนั้นจึงนำไปสร้างเป็นประโยค
 #
-# +++ ปัญหา +++
-# getDisplayInfo(...), calculatePriority(...) และ calculateLevel(...) มีวิธีการคิดที่แตกต่างกันขึ้นอยู่กับลักษณะของข้อมูล
-# 
+
 
 #
 # ตัวอย่าง config.val
@@ -38,9 +36,9 @@ generate = (data, nData) ->
   data = getAttrs(data)
   data = selectData(data, nData)
   # console.log data
-  result = buildSentences(data);
+  result = buildSentences(data)
   console.log result
-  return result.join(' ');
+  # return result.join(' ')
 
 ###
 Add more required attributes
@@ -49,11 +47,21 @@ Add more required attributes
 ###
 getAttrs = (data) ->
   for i of data
+
     if(config.val[data[i].title])
       name = data[i].title
     else
       name = 'default'
-    data[i].dataType = config.val[name].dataType
+    dataType = config.val[name].dataType
+
+    # Custom for more attributes
+    if(config[dataType] && config[dataType].getAttrs)
+      console.log("Override " + data[i].title + " for getAttrs")
+      data[i] = config[dataType].getAttrs(data[i])
+      # console.log data[i]
+
+    # Default attributes
+    data[i].dataType = dataType
     data[i].difference = getDifference(data[i])
     data[i].sentenceType = config.val[name].sentenceType
     data[i].contentGroup = config.val[name].contentGroup
@@ -73,7 +81,8 @@ getDifference = (data) ->
   # Override
   if(config[data.dataType] && config[data.dataType].getDifference)
     console.log("Override " + data.title + " for getDifference")
-    return config[data.dataType].getDifference(data.newData, data.oldData);
+    # console.log data
+    return config[data.dataType].getDifference(data)
   # Default
   data.newData - data.oldData
 
@@ -117,7 +126,6 @@ calculatePriority = (data, configVal) ->
     newPriority = priorityConfig.init + (priorityConfig.negativeFactor * Math.abs(data.difference))
   parseInt(newPriority.toFixed(0))
 
-
 ###
 Calculate the intesity of change
 @param  {object} data
@@ -139,7 +147,6 @@ calculateLevel = (data, configVal) ->
     level = 3 if(level > 3)
     level = -3 if(level < -3)
   level
-
 
 calculateType = (level) ->
   if level > 0
@@ -163,6 +170,10 @@ selectData = (data, nData) ->
 
 # แบ่งกลุ่มเป็นประโยคที่บังคับแสดง (always show) กับประโยคที่ไม่บังคับแสดง (เรียงตาม priority จากมากไปน้อย)
 groupData = (data) ->
+  # Remove hidden items
+  data = _.filter(data, (item) ->
+    ! item.hidden
+  )
   data = _.groupBy(data, "alwaysShow")
   data.sortedData = []
   data.alwaysShow = []
@@ -200,26 +211,45 @@ buildSentences = (data) ->
       result.push(buildCompoundSentence(data[group]))
   result
 
+###
+Group data into contentGroups and loop through each
+contentGroup to create sentence(s)
+@param  {object} data - data object
+@return {array} array of sentences
+###
 buildSimpleSentence = (data) ->
+  simpleSentences = getSimpleSentenceList(data, sentences.simpleSentences)
+  # console.log replaceStr(simpleSentences, data.displayInfo)
+  replaceStr(simpleSentences, data.displayInfo)
+
+###
+Get a valid list of sentences for random selecting
+@param  {object} data - data object
+@param  {array}  simpleSentences - sentences from all types
+@return {array}  array of valid sentences
+###
+getSimpleSentenceList = (data, simpleSentencese) ->
+  # Override
+  if(config[data.sentenceType] && config[data.sentenceType].getSimpleSentenceList)
+    console.log("Override " + data.title + " for getSimpleSentenceList")
+    return config[data.sentenceType].getSimpleSentenceList(data, simpleSentencese)
+  # Default
   if(sentences.simpleSentences[data.sentenceType] && sentences.simpleSentences[data.sentenceType][data.levelType] && sentences.simpleSentences[data.sentenceType][data.level.toString()])
-    return replaceStr(sentences.simpleSentences[data.sentenceType][data.levelType][data.level.toString()], data.displayInfo)
-  replaceStr(sentences.simpleSentences['default'][data.levelType][data.level.toString()], data.displayInfo)
+    return sentences.simpleSentences[data.sentenceType][data.levelType][data.level.toString()]
+  sentences.simpleSentences['default'][data.levelType][data.level.toString()]
 
 buildCompoundSentence = (data) ->
   types = _.pluck(data, 'levelType');
   type = types.join('_')
-  # console.log type
-  moreData = _.pluck(addSimpleSentence(data), 'displayInfo');
+  moreDisplayInfo = _.pluck(addSimpleSentence(data), 'displayInfo');
   selectedSentences = _.find(sentences.compoundSentences, (group) ->
     _.contains(group.type, type);
   )
-  # selectedSentences = _.findWhere(sentences.compoundSentences, {newsroom: "The New York Times"});
-  # console.log moreData
-  capitalize(replaceCombinedStr(selectedSentences.sentences, moreData))
+  console.log type
+  capitalize(replaceCombinedStr(selectedSentences.sentences, moreDisplayInfo))
   # if(sentences.compound && sentences.compound[type] && sentences.compound[type])
   #   return replaceStr(sentences.simpleSentences[group][type][data.level.toString()], data.displayInfo)
   # replaceStr(sentences.simpleSentences['default'][data.levelType][data.level.toString()], data.displayInfo)
-
 
 addSimpleSentence = (data) ->
   for i of data
@@ -235,8 +265,11 @@ Replace sentence pattern with string in data object
 ###
 replaceStr = (patterns, data) ->
   pattern = _.sample(patterns)
+  # console.log "++++++" + data.title
+  # console.log patterns
   for key of data
     pattern = pattern.replace("{" + key + "}", data[key])
+  console.log pattern
   pattern
 
 ###

@@ -145,7 +145,97 @@
 			"sensitiveness": 1
 		},
 		"dataType": "sign",
-		"sentenceType": "default",
+		"sentenceType": "earning",
+		"contentGroup": "sign",
+		"precision": null
+	},
+	"Operating Margin": {
+		"priority": {
+			"init": 1,
+			"negativeFactor": 10,
+			"positiveFactor": 10
+		},
+		"level": {
+			"threshold": 1,
+			"sensitiveness": 1
+		},
+		"dataType": "sign",
+		"sentenceType": "operating",
+		"contentGroup": "sign",
+		"precision": null
+	},
+	"Debt Level": {
+		"priority": {
+			"init": 1,
+			"negativeFactor": 100,
+			"positiveFactor": 100
+		},
+		"level": {
+			"threshold": 1,
+			"sensitiveness": 1
+		},
+		"dataType": "sign",
+		"sentenceType": "debt",
+		"contentGroup": "sign",
+		"precision": null
+	},
+	"Return on Equity": {
+		"priority": {
+			"init": 1,
+			"negativeFactor": 10,
+			"positiveFactor": 10
+		},
+		"level": {
+			"threshold": 1,
+			"sensitiveness": 1
+		},
+		"dataType": "sign",
+		"sentenceType": "roe",
+		"contentGroup": "sign",
+		"precision": null
+	},
+	"Dividend Payout": {
+		"priority": {
+			"init": 1,
+			"negativeFactor": 10,
+			"positiveFactor": 10
+		},
+		"level": {
+			"threshold": 1,
+			"sensitiveness": 1
+		},
+		"dataType": "sign",
+		"sentenceType": "dividend",
+		"contentGroup": "sign",
+		"precision": null
+	},
+	"Share Repurchase": {
+		"priority": {
+			"init": 1,
+			"negativeFactor": 10,
+			"positiveFactor": 10
+		},
+		"level": {
+			"threshold": 1,
+			"sensitiveness": 1
+		},
+		"dataType": "sign",
+		"sentenceType": "repurchase",
+		"contentGroup": "sign",
+		"precision": null
+	},
+	"CapEx": {
+		"priority": {
+			"init": 1,
+			"negativeFactor": 10,
+			"positiveFactor": 10
+		},
+		"level": {
+			"threshold": 1,
+			"sensitiveness": 1
+		},
+		"dataType": "sign",
+		"sentenceType": "capex",
 		"contentGroup": "sign",
 		"precision": null
 	}
