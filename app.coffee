@@ -1,285 +1,303 @@
-_ = require("underscore")
-require "coffee-script"
+#
+# +++ แนวคิด +++
+# (ยังไม่อัพเดต)
+# 1. Data Preparation
+# ข้อมูลที่เข้าฟังก์ชัน generate จะเป็นอาเรย์ของ object ที่ประกอบไปด้วย properties [title*, newData*, oldData, alwaysShow]
+# จากนั้นจึงไปเรียกฟังก์ชันต่างๆ เพื่อจัดเตรียมข้อมูลที่จำเป็นในการสร้างประโยคได้แก่
+# - displayInfo: object ที่เก็บสตริงที่ปรับอยู่ในรูปพร้อมใช้งาน (พร้อมนำไปแทนค่าใน pattern ประโยค)
+# - priority: คำนวณหาค่า priority ของประโยค โดยใช้ค่า default priority ที่มีอยู่ในไฟล์ setting
+# - level: คำนวณค่าความรุนแรงในการเปลี่ยนแปลงของข้อมูล
+# - group: จัดกลุ่มว่าข้อมูลใดมีลักษณะเหมือนกัน สามารถนำไปรวบเป็นประโยคเดียวกันได้หรือใช้รูปประโยคเดียวกันได้บ้าง
+# - type: บอกลักษณะของการเปลี่ยนแปลงว่าเป็นไปในทางบวกหรือลบ
+# เมื่อได้ข้อมูลที่จำเป็นสำหรับใช้สร้างประโยคแล้ว จะเลือกข้อมูลตามความสำคัญมา n ข้อมูลเพื่อใช้สร้างประโยค
+#
+# 2. Sentence Generation
+# ข้อมูลที่ได้จากขั้นตอนข้างบนจะถูกเอาไปกรุ๊ปตาม group ของข้อมูล เพื่อดูว่ามีข้อมูลไหนจัดกลุ่มเข้าด้วยกันได้บ้าง จากนั้นจึงนำไปสร้างเป็นประโยค
+#
 
-oldData = require("./resources/old.json")
-newData = require("./resources/new.json")
-words = require("./resources/words.json")
-settings = require("./resources/settings.json")
+dataConfig = require("./data_config.coffee")
+sentenceConfig = require("./sentence_config.coffee")
+config = require("./resources/config.json")
 sentences = require("./resources/sentences.json")
+input = require("./resources/input.json")
+_ = require("underscore")
 
-# JittaData = require("./JittaData")
+#
+# Data Preparation
+# 
 
-class JittaData
+# nData คือจำนวน Data ที่ต้องการ
+generate = (data, nData) ->
+  data = getAttrs(data)
+  data = selectData(data, nData)
+  # console.log data
+  result = buildSentences(data)
+  # console.log result
+  return result.join(' ')
 
-  constructor: (name, oldData, newData) ->
-    @name = name
-    @oldData = data
-    @newData = data
+###
+Add more required attributes
+@param  {object} data
+@return {object} new data with more attributes
+###
+getAttrs = (data) ->
+  for i of data
 
-  replaceStr: (patterns, data) ->
-    pattern = _.sample(patterns)
-    for key of data
-      pattern = pattern.replace("{" + key + "}", data[key])
-    @capitalize(pattern)
-
-  capitalize: (data) ->
-    data.charAt(0).toUpperCase() + data.slice(1);
-
-class JittaPrice extends JittaData
-
-  constructor: (name, oldData, newData) ->
-    @name = name
-    @displayName = "the price"
-    @oldData = oldData
-    @newData = newData
-    @priority = @getPriority()
-    @sensitiveness = @getSensitiveness()
-    @postfix = @getPostfix()
-    @update = @getUpdate()
-
-  getPriority: () ->
-    settings.jitta[@name].priority
-
-  getPostfix: () ->
-    " " + oldData.jitta.Currency
-
-  getSensitiveness: () ->
-    settings.jitta[@name].sensitiveness
-
-  alwaysShow: () ->
-    settings.jitta[@name].always_show
-
-  getUpdate: () ->
-    if(@alwaysShow() || @oldData != @newData)
-      @buildSentence()
+    if(config[data[i].title])
+      name = data[i].title
     else
-      null
+      name = 'default'
+    dataType = config[name].dataType
 
-  buildSentence: () ->
-    index = @getLevel()
-    data = {
-      name: @displayName,
-      oldData: @oldData + @postfix,
-      newData: @newData + @postfix,
-      difference: @getDisplayDifference()
-    }
-    @replaceStr(sentences.quantitative[index], data)
+    # Custom for more attributes
+    if(dataConfig[dataType] && dataConfig[dataType].getAttrs)
+      console.log("Override " + data[i].title + " for getAttrs")
+      data[i] = dataConfig[dataType].getAttrs(data[i])
+      # console.log data[i]
 
-  getLevel: () ->
-    boundedDiff = @getBoundedDifference()
-    level = Math.ceil(Math.abs(boundedDiff / (@sensitiveness / 5)))
-    if boundedDiff > 0
-      level = 5  if level > 5
+    # Default attributes
+    data[i].dataType = dataType
+    data[i].difference = getDifference(data[i])
+    data[i].sentenceType = config[name].sentenceType
+    data[i].contentGroup = config[name].contentGroup
+    data[i].displayInfo = getDisplayInfo(data[i], config[name])
+    data[i].priority = calculatePriority(data[i], config[name])
+    data[i].level = calculateLevel(data[i], config[name])
+    data[i].levelType = calculateType(data[i].level)
+  data
+
+###
+Get the difference between old value and current value
+@param  {any}    newData
+@param  {any}    oldData
+@return {object} difference value
+###
+getDifference = (data) ->
+  # Override
+  if(dataConfig[data.dataType] && dataConfig[data.dataType].getDifference)
+    console.log("Override " + data.title + " for getDifference")
+    # console.log data
+    return dataConfig[data.dataType].getDifference(data)
+  # Default
+  data.newData - data.oldData
+
+###
+Prepare strings required to show in the sentence
+@param  {object} data
+@param  {object} config
+@return {object} information required to display in the sentence
+###
+getDisplayInfo = (data, configVal) ->
+  # Override
+  if(dataConfig[data.dataType] && dataConfig[data.dataType].getDisplayInfo)
+    console.log("Override " + data.title + " for getDisplayInfo")
+    return dataConfig[data.dataType].getDisplayInfo(data, configVal)
+  # Default
+  precision = configVal.precision
+  result = {}
+  result.title = data.title.toLowerCase()
+  result.oldData = data.oldData.toFixed(precision)
+  result.newData = data.newData.toFixed(precision)
+  result.difference = Math.abs(data.difference).toFixed(precision)
+  result
+
+###
+Calculate the priority of change
+@param  {object} data
+@param  {object} config
+@return {number} new priority
+###
+calculatePriority = (data, configVal) ->
+  # Override
+  if(dataConfig[data.dataType] && dataConfig[data.dataType].calculatePriority)
+    console.log("Override " + data.title + " for calculatePriority")
+    configVal.priority.init = data.priority if(! typeof(data.priority) == undefined)
+    return dataConfig[data.dataType].calculatePriority(data.difference, configVal.priority)
+  # Default
+  priorityConfig = configVal.priority
+  if(data.difference > 0)
+    newPriority = priorityConfig.init + (priorityConfig.positiveFactor * data.difference)
+  else
+    newPriority = priorityConfig.init + (priorityConfig.negativeFactor * Math.abs(data.difference))
+  parseInt(newPriority.toFixed(0))
+
+###
+Calculate the intesity of change
+@param  {object} data
+@param  {object} config
+@return {number} intensity of the change
+###
+calculateLevel = (data, configVal) ->
+  # Override
+  if(dataConfig[data.dataType] && dataConfig[data.dataType].calculateLevel)
+    console.log("Override " + data.title + " for calculateLevel")
+    return dataConfig[data.dataType].calculateLevel(data.difference, configVal.level)
+  # Default
+  levelConfig = configVal.level
+  absoluteDifference = Math.abs(data.difference)
+  if(absoluteDifference < levelConfig.threshold)
+    level = 0
+  else
+    level = Math.ceil(data.difference/levelConfig.sensitiveness)
+    level = 3 if(level > 3)
+    level = -3 if(level < -3)
+  level
+
+calculateType = (level) ->
+  if level > 0
+    "positive"
+  else if level < 0
+    "negative"
+  else
+    "neutral"
+
+# เลือกข้อมูลมาเป็นจำนวน nData และเรียงประโยคอีกครั้งตาม priority (มากไปน้อย)
+selectData = (data, nData) ->
+  groupedData = groupData(data)
+  result = groupedData.alwaysShow
+  if result.length < nData
+    nRemaining = nData - result.length
+    result = result.concat(groupedData.sortedData.slice(0, nRemaining))
+  result.sort (a, b) ->
+    b.priority - a.priority
+
+  result
+
+# แบ่งกลุ่มเป็นประโยคที่บังคับแสดง (always show) กับประโยคที่ไม่บังคับแสดง (เรียงตาม priority จากมากไปน้อย)
+groupData = (data) ->
+  # Remove hidden items
+  data = _.filter(data, (item) ->
+    ! item.hidden
+  )
+  data = _.groupBy(data, "alwaysShow")
+  data.sortedData = []
+  data.alwaysShow = []
+  if data[false]
+    data[false].sort (a, b) ->
+      b.priority - a.priority
+
+    data.sortedData = data[false]
+  data.alwaysShow = data[true] if data[true]
+  data
+
+#
+# Sentence Generation
+# 
+
+###
+Group data into contentGroups and loop through each
+contentGroup to create sentence(s)
+@param  {array} data - array sorted by priority but not grouped
+@return {array} array of sentences
+###
+buildSentences = (data) ->
+  result = []
+  data = _.groupBy(data, "contentGroup")
+  for group of data
+    if(data[group].length > 2)
+      i = 0
+      while i < data[group].length
+        if i + 1 is data[group].length
+          result.push(buildCompoundSentence([data[group][i]]))
+        else
+          result.push(buildCompoundSentence([data[group][i], data[group][parseInt(i)+1]]))
+        i = i + 2
     else
-      level = level * -1
-      level = -5  if level < -5
-    level.toString()
+      result.push(buildCompoundSentence(data[group]))
+  result
 
-  getBoundedDifference: () ->
-    boundedDiff = (@newData - @oldData)/@oldData
-    boundedDiff = 1 if boundedDiff > 1
-    boundedDiff = -1 if boundedDiff < -1
-    boundedDiff
+###
+Group data into contentGroups and loop through each
+contentGroup to create sentence(s)
+@param  {object} data - data object
+@return {array} array of sentences
+###
+buildSimpleSentence = (data) ->
+  simpleSentences = getSimpleSentenceList(data, sentences.simpleSentences)
+  # console.log replaceStr(simpleSentences, data.displayInfo)
+  replaceStr(simpleSentences, data.displayInfo)
 
-  getDisplayDifference: () ->
-    Math.abs(@newData - @oldData).toFixed(2) + @postfix
+###
+Get a valid list of sentences for random selecting
+@param  {object} data - data object
+@param  {array}  simpleSentences - sentences from all types
+@return {array}  array of valid sentences
+###
+getSimpleSentenceList = (data, simpleSentencese) ->
+  # Override
+  if(sentenceConfig[data.sentenceType] && sentenceConfig[data.sentenceType].getSimpleSentenceList)
+    console.log("Override " + data.title + " for getSimpleSentenceList")
+    return sentenceConfig[data.sentenceType].getSimpleSentenceList(data, simpleSentencese)
+  # Default
+  if(sentences.simpleSentences[data.sentenceType] && sentences.simpleSentences[data.sentenceType][data.levelType] && sentences.simpleSentences[data.sentenceType][data.level.toString()])
+    return sentences.simpleSentences[data.sentenceType][data.levelType][data.level.toString()]
+  sentences.simpleSentences['default'][data.levelType][data.level.toString()]
 
-class JittaSign extends JittaData
+buildCompoundSentence = (data) ->
+  types = _.pluck(data, 'levelType');
+  type = types.join('_')
+  moreDisplayInfo = _.pluck(addSimpleSentence(data), 'displayInfo');
+  selectedSentences = _.find(sentences.compoundSentences, (group) ->
+    _.contains(group.type, type);
+  )
+  # console.log type
+  capitalize(replaceCombinedStr(selectedSentences.sentences, moreDisplayInfo))
+  # if(sentences.compound && sentences.compound[type] && sentences.compound[type])
+  #   return replaceStr(sentences.simpleSentences[group][type][data.level.toString()], data.displayInfo)
+  # replaceStr(sentences.simpleSentences['default'][data.levelType][data.level.toString()], data.displayInfo)
 
-  constructor: (name, oldData, newData) ->
-    @name = name
-    @oldData = oldData
-    @newData = newData
-    @priority = @getPriority()
-    @update = @getUpdate()
+addSimpleSentence = (data) ->
+  for i of data
+    data[i].displayInfo.sentence = buildSimpleSentence(data[i])
+  data
 
-  getPriority: () ->
-    settings.qualitative[@name].priority
+###
+Replace sentence pattern with string in data object
+(single sentence, no capitalization or full stop)
+@param  {array}  patterns - array of sentences
+@param  {object} data - displayInfo object
+@return {string} final sentence
+###
+replaceStr = (patterns, data) ->
+  pattern = _.sample(patterns)
+  # console.log "++++++" + data.title
+  # console.log patterns
+  for key of data
+    pattern = pattern.replace("{" + key + "}", data[key])
+  # console.log pattern
+  pattern
 
-  alwaysShow: () ->
-    settings.qualitative[@name].always_show
+###
+Replace sentence pattern with string in data object
+(combined sentence, with capitalization and full stop)
+@param  {array}  patterns - array of sentences
+@param  {array}  data - array of displayInfo object
+@return {string} final sentence
+###
+replaceCombinedStr = (patterns, data) ->
+  pattern = _.sample(patterns)
+  for i of data
+      for key of data[i]
+        pattern = pattern.replace("{" + key + "." + i + "}", data[i][key])
+  pattern
 
-  getUpdate: () ->
-    if(@alwaysShow() || @hasUpdate())
-      @buildSentence()
-    else
-      null
-  
-  hasUpdate: () ->
-    if((@oldData != @newData && @newData != null) || (@oldData == null && @newData != null))
-      true
-    else
-      false
+###
+Change the first character of the string to capital
+@param  {string} data
+@return {string} capitalized string
+###
+capitalize = (data) ->
+  data.charAt(0).toUpperCase() + data.slice(1);
 
-  getDisplayData: (data) ->
-    if(data == null)
-      "no data"
-    else
-      data.toLowerCase()
+#
+# ตัวอย่าง input ของ generate function
+# 
+# input = [
+console.log generate(input.data, 50)
 
-  buildSentence: () ->
-    index = @getLevel()
-    data = {
-      name: @name.toLowerCase(),
-      oldData: @getDisplayData(@oldData),
-      newData: @getDisplayData(@newData)
-    }
-    @replaceStr(sentences.qualitative[index], data)
-
-  getLevel: () ->
-    oldLevel = @getDataLevel(@oldData)
-    newLevel = @getDataLevel(@newData)
-    if(newLevel == null)
-      return "null"
-    else
-      (newLevel - oldLevel).toString()
-
-  getDataLevel: (data) ->
-    if(data == null)
-      return null
-    for item of words[@name]
-      pattern = new RegExp(item, "g");
-      if pattern.test(data)
-        return words[@name][item]
-    return null
-
-class JittaFactor extends JittaPrice
-
-  constructor: (name, oldData, newData) ->
-    @name = name
-    @displayName = name
-    @oldData = oldData
-    @newData = newData
-    @max = @getMax()
-    @min = @getMin()
-    @priority = @getPriority()
-    @sensitiveness = @getSensitiveness()
-    @postfix = @getPostfix()
-    @update = @getUpdate()
-
-  getPostfix: () ->
-    "%"
-
-  getMax: () ->
-    settings.quantitative[@name].max
-
-  getMin: () ->
-    settings.quantitative[@name].min
-
-  getPriority: () ->
-    settings.quantitative[@name].priority
-
-  getSensitiveness: () ->
-    settings.quantitative[@name].sensitiveness
-
-  alwaysShow: () ->
-    settings.quantitative[@name].always_show
-
-  getDisplayDifference: () ->
-    Math.abs(@newData - @oldData).toFixed(0) + @postfix
-
-  getBoundedDifference: () ->
-    (@newData - @oldData)/(@max - @min)
-
-class JittaScore extends JittaFactor
-
-  constructor: (name, oldData, newData) ->
-    super
-
-  getPostfix: () ->
-    ""
-
-class JittaLine extends JittaFactor
-
-  constructor: (name, oldData, newData) ->
-    @name = name
-    @oldData = @getNumber(oldData)
-    @newData = @getNumber(newData)
-    @oldDataFull = oldData
-    @newDataFull = newData
-    @max = 100
-    @min = 0
-    @priority = @getPriority()
-    @sensitiveness = @getSensitiveness()
-    @update = @getUpdate()
-
-  getNumber: (data) ->
-    percentIndex = data.indexOf("%")
-    status = data.substring(percentIndex + 2, percentIndex + 7)
-    number = data.substring(0, percentIndex)
-    number = number * -1  if status is "Below"
-    number
-
-  getStatus: (data) ->
-    percentIndex = data.indexOf("%")
-    data.substring(percentIndex + 2, percentIndex + 7)
-
-  getLevelStatus: () ->
-    @getStatus(@oldDataFull) + "_" + @getStatus(@newDataFull)
-
-  getUpdate: () ->
-    if(@alwaysShow() || @oldData != @newData)
-      @buildSentence()
-    else
-      null
-
-  buildSentence: () ->
-    status = @getLevelStatus()
-    index = @getLevel()
-    data = {
-      name: "the price",
-      oldData: @oldDataFull.toLowerCase(),
-      newData: @newDataFull.toLowerCase(),
-      oldNumber: Math.abs(@oldData),
-      newNumber: Math.abs(@newData)
-    }
-    @replaceStr(sentences.jitta_line[status][index], data)
-
-listofSentences = {
-  jitta: [],
-  quantitative: [],
-  qualitative: []
-}
-
-init = ->
-  for factor of oldData.qualitative
-    a = new JittaSign(factor, oldData.qualitative[factor], newData.qualitative[factor]);
-    if(a.update)
-      listofSentences.qualitative.push(a)
-
-  for factor of oldData.quantitative
-    a = new JittaFactor(factor, oldData.quantitative[factor], newData.quantitative[factor]);
-    if(a.update)
-      listofSentences.quantitative.push(a)
-
-  a = new JittaLine("Jitta Line", oldData.jitta["Jitta Line"], newData.jitta["Jitta Line"])
-  if(a.update)
-    listofSentences.jitta.push(a)
-
-  a = new JittaPrice("Price", oldData.jitta["Price"], newData.jitta["Price"])
-  if(a.update)
-    listofSentences.jitta.push(a)
-
-  a = new JittaScore("Jitta Score", oldData.jitta["Jitta Score"], newData.jitta["Jitta Score"])
-  if(a.update)
-    listofSentences.jitta.push(a)
-
-  for type of listofSentences
-    listofSentences[type] = _.sortBy(listofSentences[type], (item) ->
-      item.priority
-    )
-  printSentences()
-
-printSentences = ->
-  for type of listofSentences
-    for i of listofSentences[type]
-      console.log listofSentences[type][i].update
-
-testMatch = (key) ->
-  for item of words[key]
-    pattern = new RegExp(item, "g");
-    # console.log item
-    if pattern.test("High A B D High .* in the past 5 years")
-      return words[key][item]
-
-init()
+#TODO
+#- build compound sentence by difference combination of levels?
+#- 'No oldData' case
+#- full, medium, short sentences
+#- display format is not in the same as the input format (e.g. input: 2.50, display: 2.5 baht)
+#

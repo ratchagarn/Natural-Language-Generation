@@ -1,6 +1,12 @@
 {
 	"data": [
 		{
+			"title": "Jitta Line",
+			"oldData": "52.62% Below Jitta Line",
+			"newData": "62.62% Below Jitta Line",
+			"alwaysShow": true
+		},
+		{
 			"title": "Price",
 			"oldData": 95.22,
 			"newData": 80.20,

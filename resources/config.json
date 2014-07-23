@@ -14,6 +14,21 @@
 		"contentGroup": "default",
 		"precision": 0
 	},
+	"Jitta Line": {
+		"priority": {
+			"init": 100,
+			"negativeFactor": 2,
+			"positiveFactor": 1
+		},
+		"level": {
+			"threshold": 0.09,
+			"sensitiveness": 1
+		},
+		"dataType": "jittaline",
+		"sentenceType": "jittaline",
+		"contentGroup": "jittaline",
+		"precision": 0
+	},
 	"Jitta Score": {
 		"priority": {
 			"init": 50,
