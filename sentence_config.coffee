@@ -6,11 +6,14 @@
 # JittaLine
 exports.jittaline =
   getSimpleSentenceList: (data, simpleSentences) ->
-    group = data.displayInfo.oldLine + "_" + data.displayInfo.newLine
-    if(simpleSentences[data.sentenceType] && simpleSentences[data.sentenceType][group])
-      simpleSentences[data.sentenceType][group][data.level]
+    if typeof data.displayInfo.oldLine != 'undefined'
+      group = data.displayInfo.oldLine + "_" + data.displayInfo.newLine
+      if(simpleSentences[data.sentenceType] && simpleSentences[data.sentenceType][group])
+        simpleSentences[data.sentenceType][group][data.level]
+      else
+        ['Error']
     else
-      ['Error']
+      simpleSentences.default.na
 
 # Earning
 exports.earning =
@@ -39,8 +42,9 @@ exports.debt =
 # Return on Equity
 exports.roe =
   getSimpleSentenceList: (data, simpleSentences) ->
-    if(simpleSentences[data.sentenceType] && simpleSentences[data.sentenceType][data.oldScore] && simpleSentences[data.sentenceType][data.oldScore][data.newScore])
-      simpleSentences[data.sentenceType][data.oldScore][data.newScore]
+    oldScore = if typeof data.oldScore == 'undefined' then 0 else data.oldScore
+    if(simpleSentences[data.sentenceType] && simpleSentences[data.sentenceType][oldScore] && simpleSentences[data.sentenceType][oldScore][data.newScore])
+      simpleSentences[data.sentenceType][oldScore][data.newScore]
     else
       ['Error']
 
@@ -55,8 +59,9 @@ exports.dividend =
 # Share Repurchase
 exports.repurchase =
   getSimpleSentenceList: (data, simpleSentences) ->
-    if(simpleSentences[data.sentenceType] && simpleSentences[data.sentenceType][data.oldScore] && simpleSentences[data.sentenceType][data.oldScore][data.newScore])
-      simpleSentences[data.sentenceType][data.oldScore][data.newScore]
+    oldScore = if typeof data.oldScore == 'undefined' then 0 else data.oldScore
+    if(simpleSentences[data.sentenceType] && simpleSentences[data.sentenceType][oldScore] && simpleSentences[data.sentenceType][oldScore][data.newScore])
+      simpleSentences[data.sentenceType][oldScore][data.newScore]
     else
       ['Error']
 

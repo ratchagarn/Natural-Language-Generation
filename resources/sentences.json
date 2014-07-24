@@ -1,6 +1,9 @@
 {
     "simpleSentences": {
         "default": {
+            "na": [
+                "{title} is {newData}"
+            ],
             "positive": {
                 "1": [
                     "{title} has slightly raised to {newData}",
@@ -145,6 +148,9 @@
             ]
         },
         "operating": {
+            "na": [
+                "{title} is {newData}"
+            ],
             "positive": [
                 "{title} is {newData}"
             ],
@@ -181,6 +187,9 @@
             ],
             "negative": [
                 "{title} is {newData}"
+            ],
+            "na": [
+                "{title} is {newData}"
             ]
         },
         "repurchase": {
@@ -196,6 +205,9 @@
             }
         },
         "capex": {
+            "na": [
+                "{title} is {newData}"
+            ],
             "positive": [
                 "{title} is {newData}"
             ],
@@ -212,7 +224,8 @@
             "type": [
                 "positive",
                 "neutral",
-                "negative"
+                "negative",
+                "na"
             ],
             "sentences": [
                 "{sentence.0}."
@@ -230,7 +243,8 @@
         },
         {
             "type": [
-                "positive_positive"
+                "positive_positive",
+                "na_na"
             ],
             "sentences": [
                 "{sentence.0}, and {sentence.1}."
