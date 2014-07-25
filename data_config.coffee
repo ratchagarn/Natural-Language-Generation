@@ -117,3 +117,11 @@ exports.sign =
       parseInt(data.newScore) - parseInt(data.oldScore)
     else
       'na'
+
+# Error
+exports.error =
+  getDisplayInfo: (data, config) ->
+    result = {}
+    result.title = data.title
+    result.newData = data.newData.toLowerCase()
+    result

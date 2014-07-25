@@ -1,25 +1,8 @@
-#
-# +++ แนวคิด +++
-# (ยังไม่อัพเดต)
-# 1. Data Preparation
-# ข้อมูลที่เข้าฟังก์ชัน generate จะเป็นอาเรย์ของ object ที่ประกอบไปด้วย properties [title*, newData*, oldData, alwaysShow]
-# จากนั้นจึงไปเรียกฟังก์ชันต่างๆ เพื่อจัดเตรียมข้อมูลที่จำเป็นในการสร้างประโยคได้แก่
-# - displayInfo: object ที่เก็บสตริงที่ปรับอยู่ในรูปพร้อมใช้งาน (พร้อมนำไปแทนค่าใน pattern ประโยค)
-# - priority: คำนวณหาค่า priority ของประโยค โดยใช้ค่า default priority ที่มีอยู่ในไฟล์ setting
-# - level: คำนวณค่าความรุนแรงในการเปลี่ยนแปลงของข้อมูล
-# - group: จัดกลุ่มว่าข้อมูลใดมีลักษณะเหมือนกัน สามารถนำไปรวบเป็นประโยคเดียวกันได้หรือใช้รูปประโยคเดียวกันได้บ้าง
-# - type: บอกลักษณะของการเปลี่ยนแปลงว่าเป็นไปในทางบวกหรือลบ
-# เมื่อได้ข้อมูลที่จำเป็นสำหรับใช้สร้างประโยคแล้ว จะเลือกข้อมูลตามความสำคัญมา n ข้อมูลเพื่อใช้สร้างประโยค
-#
-# 2. Sentence Generation
-# ข้อมูลที่ได้จากขั้นตอนข้างบนจะถูกเอาไปกรุ๊ปตาม group ของข้อมูล เพื่อดูว่ามีข้อมูลไหนจัดกลุ่มเข้าด้วยกันได้บ้าง จากนั้นจึงนำไปสร้างเป็นประโยค
-#
-
 dataConfig     = require("./data_config.coffee")
 sentenceConfig = require("./sentence_config.coffee")
 config         = require("./resources/config.json")
 sentences      = require("./resources/sentences.json")
-input          = require("./resources/input.json")
+input          = require("./resources/input3.json")
 _              = require("underscore")
 
 #
@@ -153,7 +136,12 @@ calculateLevel = (data, configVal) ->
       level = 3 if(level > 3)
       level = -3 if(level < -3)
   level
-# 
+
+###
+Calculate the type of intesity
+@param  {number} level
+@return {string} levelType
+###
 calculateType = (level) ->
   if level > 0
     "positive"
@@ -164,7 +152,12 @@ calculateType = (level) ->
   else
     "neutral"
 
-# เลือกข้อมูลมาเป็นจำนวน nData และเรียงประโยคอีกครั้งตาม priority (มากไปน้อย)
+###
+Select number of data to display and sort by priority
+@param  {array}  data - array of data
+@param  {number} nData - number of data to show
+@return {array}  selected, sorted data by priority
+###
 selectData = (data, nData) ->
   groupedData = groupData(data)
   result = groupedData.alwaysShow
@@ -176,7 +169,11 @@ selectData = (data, nData) ->
 
   result
 
-# แบ่งกลุ่มเป็นประโยคที่บังคับแสดง (always show) กับประโยคที่ไม่บังคับแสดง (เรียงตาม priority จากมากไปน้อย)
+###
+Group data by alwaysShow attr and sort the group by priority
+@param  {array} data - array of data
+@return {array} data split into two groups, alwaysShow and sortedData
+###
 groupData = (data) ->
   # Remove hidden items
   data = _.filter(data, (item) ->
@@ -223,7 +220,7 @@ buildSentences = (data) ->
 Group data into contentGroups and loop through each
 contentGroup to create sentence(s)
 @param  {object} data - data object
-@return {array} array of sentences
+@return {array}  array of sentences
 ###
 buildSimpleSentence = (data) ->
   simpleSentences = getSimpleSentenceList(data, sentences.simpleSentences)
@@ -241,13 +238,21 @@ getSimpleSentenceList = (data, simpleSentencese) ->
     console.log("Override " + data.title + " for getSimpleSentenceList")
     return sentenceConfig[data.sentenceType].getSimpleSentenceList(data, simpleSentencese)
   # Default
-  if(typeof data.oldData != 'undefined' && sentences.simpleSentences[data.sentenceType] && sentences.simpleSentences[data.sentenceType][data.levelType] && sentences.simpleSentences[data.sentenceType][data.level.toString()])
-    sentences.simpleSentences[data.sentenceType][data.levelType][data.level.toString()]
-  else if(typeof data.oldData != 'undefined')
+  if(typeof sentences.simpleSentences[data.sentenceType] != 'undefined' && typeof sentences.simpleSentences[data.sentenceType][data.levelType] != 'undefined' && typeof sentences.simpleSentences[data.sentenceType][data.level.toString()] != 'undefined')
+    if typeof data.oldData != 'undefined'
+      sentences.simpleSentences[data.sentenceType][data.levelType][data.level.toString()]
+    else
+      sentences.simpleSentences[data.sentenceType][data.levelType]
+  else if typeof data.oldData != 'undefined'
     sentences.simpleSentences['default'][data.levelType][data.level.toString()]
   else
     sentences.simpleSentences['default']['na']
 
+###
+Combine two simple sentencese that are in the same sentenceGroup
+@param  {array}  array of one or two data objects to combine
+@return {string} a combine sentence
+###
 buildCompoundSentence = (data) ->
   types = _.pluck(data, 'levelType');
   type = types.join('_')
@@ -258,10 +263,9 @@ buildCompoundSentence = (data) ->
   capitalize(replaceCombinedStr(selectedSentences.sentences, moreDisplayInfo))
 
 ###
-Add simple
-@param  {array}  patterns - array of sentences
-@param  {object} data - displayInfo object
-@return {string} final sentence
+Add simple sentence into the data object
+@param  {array} array of data to generate simple sentences
+@return {array} array of data with sentence attribute inserted
 ###
 addSimpleSentence = (data) ->
   for i of data
@@ -306,9 +310,6 @@ capitalize = (data) ->
 
 console.log generate(input.data, 50)
 
-#TODO
-#- build compound sentence by difference combination of levels?
-#- 'No oldData' case
-#- full, medium, short sentences
-#- display format is not in the same as the input format (e.g. input: 2.50, display: 2.5 baht)
-#
+# TODO
+# - build compound sentence by difference combination of levels?
+# - full, medium, short sentences

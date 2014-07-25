@@ -72,3 +72,11 @@ exports.capex =
       simpleSentences[data.sentenceType][data.levelType]
     else
       ['Error']
+
+# Error
+exports.capex =
+  getSimpleSentenceList: (data, simpleSentences) ->
+    if(simpleSentences[data.sentenceType] && simpleSentences[data.sentenceType][data.levelType])
+      simpleSentences[data.sentenceType][data.levelType]
+    else
+      ['Error']
