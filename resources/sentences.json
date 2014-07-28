@@ -130,8 +130,6 @@
                 ]
             }
         },
-        "score": {},
-        "price": {},
         "earning": {
             "+1": [
                 "{title} is still {newData}"
@@ -259,6 +257,7 @@
             "type": [
                 "positive_neutral",
                 "negative_negative",
+                "neutral_positive",
                 "neutral_neutral",
                 "negative_neutral"
             ],

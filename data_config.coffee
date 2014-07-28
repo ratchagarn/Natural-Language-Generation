@@ -9,9 +9,9 @@ exports.jittaline =
 
   getDifference: (data) ->
     if(typeof data.oldData != 'undefined')
-        data.newNumber - data.oldNumber
+      data.newNumber - data.oldNumber
     else
-        'na'
+      'na'
 
   getNumber: (data) ->
     percentIndex = data.indexOf("%")

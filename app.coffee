@@ -105,7 +105,7 @@ calculatePriority = (data, configVal) ->
   # Default
   priorityConfig = configVal.priority
   if(data.difference == 'na')
-    return 'na'
+    return priorityConfig.init
   else if(data.difference > 0)
     newPriority = priorityConfig.init + (priorityConfig.positiveFactor * data.difference)
   else
@@ -144,13 +144,13 @@ Calculate the type of intesity
 ###
 calculateType = (level) ->
   if level > 0
-    "positive"
+    'positive'
   else if level < 0
-    "negative"
+    'negative'
   else if level == 'na'
-    "na"
+    'na'
   else
-    "neutral"
+    'neutral'
 
 ###
 Select number of data to display and sort by priority
@@ -190,9 +190,9 @@ groupData = (data) ->
   data.alwaysShow = data[true] if data[true]
   data
 
-#
+###
 # Sentence Generation
-# 
+###
 
 ###
 Group data into contentGroups and loop through each
@@ -306,7 +306,6 @@ Change the first character of the string to capital
 ###
 capitalize = (data) ->
   data.charAt(0).toUpperCase() + data.slice(1);
-
 
 console.log generate(input.data, 50)
 
